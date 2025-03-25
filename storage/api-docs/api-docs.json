@@ -1,0 +1,771 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Wheelpact API",
+        "description": "API documentation for Wheelpact backend",
+        "contact": {
+            "email": "dev@wheelpact.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/customerApi/v1/customerRegister": {
+            "post": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Register a new customer",
+                "operationId": "b6c377d2cccdd5c33c85cd28d407ed07",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "contact_no"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "contact_no": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Customer registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Customer registered successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "john@example.com"
+                                                },
+                                                "contact_no": {
+                                                    "type": "string",
+                                                    "example": "1234567890"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Customer not registered, please try again",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Customer not registered, please try again"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/customerApi/v1/customergenerateOtp": {
+            "post": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Generate OTP for Customer Login",
+                "operationId": "09ca442e7f56549483302e14371770f4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OTP generated and sent successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "OTP generated and sent successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "otp": {
+                                                    "type": "integer",
+                                                    "example": 123456
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Customer not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/customerApi/v1/customervalidateOtpLogin": {
+            "post": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Validate OTP for Customer Login",
+                "operationId": "1995758a41640e39178f25142b4e85c1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "otp"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "otp": {
+                                        "type": "integer",
+                                        "example": 123456
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login successful"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "customer": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "John Doe"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "john@example.com"
+                                                        },
+                                                        "contact_no": {
+                                                            "type": "string",
+                                                            "example": "1234567890"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "1|sdfk9dsf8dsfksdf89sdf7..."
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid OTP or email",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid OTP or email"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The email field is required."
+                                                    }
+                                                },
+                                                "otp": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The otp field must be 6 digits."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/customerApi/v1/customerTestDriveRequest": {
+            "get": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get Test Drive Requests for Logged-in Customer",
+                "description": "Returns the list of test drive requests for the authenticated customer. Requires a valid Bearer token (Sanctum).",
+                "operationId": "9f86818524cafe2f9c32e642458ce89f",
+                "responses": {
+                    "200": {
+                        "description": "Test drive list retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Test drive list retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "customer_id": {
+                                                        "type": "integer",
+                                                        "example": 5
+                                                    },
+                                                    "customer_name": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "customer_phone": {
+                                                        "type": "string",
+                                                        "example": "+1234567890"
+                                                    },
+                                                    "customer_email": {
+                                                        "type": "string",
+                                                        "example": "john@example.com"
+                                                    },
+                                                    "branch_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "vehicle_id": {
+                                                        "type": "integer",
+                                                        "example": 3
+                                                    },
+                                                    "dateOfVisit": {
+                                                        "type": "string",
+                                                        "format": "date",
+                                                        "example": "2025-03-25"
+                                                    },
+                                                    "timeOfVisit": {
+                                                        "type": "string",
+                                                        "example": "1"
+                                                    },
+                                                    "comments": {
+                                                        "type": "string",
+                                                        "example": "Looking forward to the test drive."
+                                                    },
+                                                    "license_file_path": {
+                                                        "type": "string",
+                                                        "example": "uploads/licenses/license123.jpg"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "pending"
+                                                    },
+                                                    "is_active": {
+                                                        "type": "string",
+                                                        "example": "1"
+                                                    },
+                                                    "reason_selected": {
+                                                        "type": "string",
+                                                        "example": "Convenient time"
+                                                    },
+                                                    "dealer_comments": {
+                                                        "type": "string",
+                                                        "example": "Confirmed"
+                                                    },
+                                                    "update_by": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-03-24T10:00:00Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-03-24T10:00:00Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated. Please log in to continue.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated. Please log in to continue."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Submit a Test Drive Request",
+                "description": "Authenticated customer submits a test drive request with required customer details and license file.",
+                "operationId": "d039bae69892fccfa611eb6bbed426ac",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "customer_id",
+                                    "customer_name",
+                                    "customer_phone",
+                                    "branch_id",
+                                    "vehicle_id",
+                                    "dateOfVisit",
+                                    "timeOfVisit",
+                                    "comments",
+                                    "license_file_path"
+                                ],
+                                "properties": {
+                                    "customer_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "customer_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "customer_phone": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "branch_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "vehicle_id": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "dateOfVisit": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-03-25"
+                                    },
+                                    "timeOfVisit": {
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "comments": {
+                                        "type": "string",
+                                        "example": "Looking forward to the test drive."
+                                    },
+                                    "license_file_path": {
+                                        "description": "Upload license file",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Test drive request submitted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Test drive request submitted successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "customer_id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "customer_name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "customer_phone": {
+                                                    "type": "string",
+                                                    "example": "+1234567890"
+                                                },
+                                                "customer_email": {
+                                                    "type": "string",
+                                                    "example": "john@example.com"
+                                                },
+                                                "branch_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "vehicle_id": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "dateOfVisit": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2025-03-25"
+                                                },
+                                                "timeOfVisit": {
+                                                    "type": "string",
+                                                    "example": "1"
+                                                },
+                                                "license_file_path": {
+                                                    "type": "string",
+                                                    "example": "uploads/licenses/license123.jpg"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "Pending"
+                                                },
+                                                "is_active": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "update_by": {
+                                                    "type": "integer",
+                                                    "example": null,
+                                                    "nullable": true
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-03-24T10:00:00Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-03-24T10:00:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated. Please log in to continue.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated. Please log in to continue."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "branch_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The branch_id field is required."
+                                                    }
+                                                },
+                                                "license_file_path": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The license_file_path field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customerApi/v1/logout": {
+            "post": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Logout Customer (invalidate current token)",
+                "operationId": "b8d62f6b0cedf7ee5312314c1076c7e2",
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not authenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Customers",
+            "description": "Customers"
+        }
+    ]
+}
