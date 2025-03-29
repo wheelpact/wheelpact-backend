@@ -11,7 +11,7 @@ class CustomerSeeder extends Seeder {
      * Run the database seeds.
      */
     public function run(): void {
-        // Create a default admin customer (if applicable)
+       // Create a default customer
         Customer::create([
             'name' => 'Jhon Customer',
             'email' => 'test@customer.com',

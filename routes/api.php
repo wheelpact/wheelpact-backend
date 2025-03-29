@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\UserController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -44,5 +46,21 @@ Route::prefix('customerApi/v1')->middleware(['allowed_ip'])->group(function () {
         Route::post('customerTestDriveRequest', [CustomerController::class, 'storeTestDriveRequest']);
         Route::get('customerDetails', [CustomerController::class, 'getCutomer']);
         Route::post('logout', [CustomerController::class, 'logout']);
+    });
+});
+
+
+Route::prefix('dealerApi/v1')->middleware(['allowed_ip'])->group(function () {
+
+    // Public routes
+    Route::post('dealerLogin', [UserController::class, 'login']);
+    Route::post('dealerRegister', [UserController::class, 'register']);    
+
+    // Protected routes (requires Sanctum token)
+    Route::middleware('auth:sanctum')->group(function () {
+        // Route::get('customerTestDriveRequest', [CustomerController::class, 'getTestDriveRequestList']);
+        // Route::post('customerTestDriveRequest', [CustomerController::class, 'storeTestDriveRequest']);
+        // Route::get('customerDetails', [CustomerController::class, 'getCutomer']);
+        // Route::post('logout', [CustomerController::class, 'logout']);
     });
 });

@@ -18,28 +18,28 @@ return new class extends Migration {
         //     $table->rememberToken();
         //     $table->timestamps();
         // });
-
+        // this table contains the dealer details
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('user_code', 20);
+            $table->string('user_code', 20)->nullable()->unique();
             $table->string('name', 100);
             $table->text('email');
-            $table->text('addr_residential');
-            $table->text('addr_permanent');
-            $table->date('date_of_birth');
-            $table->integer('gender')->comment('1=male,2=female');
-            $table->text('profile_image');
-            $table->integer('country_id');
-            $table->integer('state_id');
-            $table->integer('city_id');
-            $table->integer('zipcode');
-            $table->string('contact_no', 20);
-            $table->string('whatsapp_no', 25);
-            $table->text('social_fb_link');
-            $table->text('social_twitter_link');
-            $table->text('social_linkedin_link');
-            $table->text('social_skype_link');
-            $table->integer('role_id');
+            $table->text('addr_residential')->nullable();
+            $table->text('addr_permanent')->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->integer('gender')->random_int('1=male,2=female');
+            $table->text('profile_image')->nullable();
+            $table->integer('country_id')->nullable();
+            $table->integer('state_id')->nullable();
+            $table->integer('city_id')->nullable();
+            $table->integer('zipcode')->random_int(6);
+            $table->string('contact_no', 20)->nullable();
+            $table->string('whatsapp_no', 25)->nullable();
+            $table->text('social_fb_link')->nullable();
+            $table->text('social_twitter_link')->nullable();
+            $table->text('social_linkedin_link')->nullable();
+            $table->text('social_skype_link')->nullable();
+            $table->integer('role_id')->nullable()->comment('1=admin,2=dealer,3=customer,4=superadmin');
             $table->integer('otp')->length(6);
             $table->tinyInteger('otp_status')->comment('1 = Otp generated for registration / reset password, 0 = OTP verified and reset to 0');
             $table->integer('is_active')->comment('1=active,2=inactive,3=deleted');

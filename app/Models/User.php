@@ -4,23 +4,53 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
-{
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Sanctum\HasApiTokens;
+
+
+class User extends Model {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
+
+    protected $table = 'users';
+
     protected $fillable = [
         'name',
+        'user_code',
         'email',
-        'password',
+        'addr_residential',
+        'addr_permanent',
+        'date_of_birth',
+        'gender',
+        'profile_image',
+        'country_id',
+        'state_id',
+        'city_id',
+        'zipcode',
+        'contact_no',
+        'whatsapp_no',
+        'social_fb_link',
+        'social_twitter_link',
+        'social_linkedin_link',
+        'social_skype_link',
+        'role_id',
+        'otp',
+        'otp_status',
+        'is_active',
+        'reset_token',
+        'token_expiration',
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     /**
@@ -38,8 +68,7 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
+    protected function casts(): array {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
