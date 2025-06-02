@@ -10,7 +10,7 @@ return new class extends Migration {
             $table->increments('id'); // INT AUTO_INCREMENT PRIMARY KEY
             $table->unsignedBigInteger('user_id'); // Reference to users.id
             $table->text('password');
-            $table->integer('is_active');
+            $table->integer('is_active')->nullable()->comment('1=active,2=inactive,3=deleted');
             $table->timestamps();
             $table->softDeletes();
         });

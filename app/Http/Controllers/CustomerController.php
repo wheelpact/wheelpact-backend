@@ -11,27 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * @OA\Info(
- *     title="Wheelpact API",
- *     version="1.0.0",
- *     description="API documentation for Wheelpact backend",
- *     @OA\Contact(
- *         email="dev@wheelpact.com"
- *     ),
- *     @OA\License(
- *         name="MIT",
- *         url="https://opensource.org/licenses/MIT"
- *     )
- * )
- *
- * @OA\SecurityScheme(
- *     securityScheme="bearerAuth",
- *     type="http",
- *     scheme="bearer",
- *     bearerFormat="JWT"
- * )
- */
 class CustomerController extends ApiController {
 
     /**

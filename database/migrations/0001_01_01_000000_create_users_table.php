@@ -9,15 +9,6 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void {
-        // Schema::create('users', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->string('name');
-        //     $table->string('email')->unique();
-        //     $table->timestamp('email_verified_at')->nullable();
-        //     $table->string('password');
-        //     $table->rememberToken();
-        //     $table->timestamps();
-        // });
         // this table contains the dealer details
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -27,22 +18,22 @@ return new class extends Migration {
             $table->text('addr_residential')->nullable();
             $table->text('addr_permanent')->nullable();
             $table->date('date_of_birth')->nullable();
-            $table->integer('gender')->random_int('1=male,2=female');
+            $table->integer('gender')->random_int('1=male,2=female')->nullable();
             $table->text('profile_image')->nullable();
             $table->integer('country_id')->nullable();
             $table->integer('state_id')->nullable();
             $table->integer('city_id')->nullable();
-            $table->integer('zipcode')->random_int(6);
+            $table->integer('zipcode')->random_int(6)->nullable();
             $table->string('contact_no', 20)->nullable();
-            $table->string('whatsapp_no', 25)->nullable();
+            $table->string('whatsapp_no', 20)->nullable();
             $table->text('social_fb_link')->nullable();
             $table->text('social_twitter_link')->nullable();
             $table->text('social_linkedin_link')->nullable();
             $table->text('social_skype_link')->nullable();
             $table->integer('role_id')->nullable()->comment('1=admin,2=dealer,3=customer,4=superadmin');
-            $table->integer('otp')->length(6);
-            $table->tinyInteger('otp_status')->comment('1 = Otp generated for registration / reset password, 0 = OTP verified and reset to 0');
-            $table->integer('is_active')->comment('1=active,2=inactive,3=deleted');
+            $table->integer('otp')->length(6)->nullaable()->comment('6 digit OTP');
+            $table->tinyInteger('otp_status')->nullable()->comment('1 = Otp generated for registration / reset password, 0 = OTP verified and reset to 0');
+            $table->integer('is_active')->nullable()->comment('1=active,2=inactive,3=deleted');
             $table->text('reset_token');
             $table->dateTime('token_expiration')->nullable();
             $table->timestamps();

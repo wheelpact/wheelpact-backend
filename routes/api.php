@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VehiclesController;
 
 
 Route::get('/user', function (Request $request) {
@@ -54,13 +55,24 @@ Route::prefix('dealerApi/v1')->middleware(['allowed_ip'])->group(function () {
 
     // Public routes
     Route::post('dealerLogin', [UserController::class, 'login']);
-    Route::post('dealerRegister', [UserController::class, 'register']);    
+    Route::post('dealerRegister', [UserController::class, 'register']);
 
     // Protected routes (requires Sanctum token)
     Route::middleware('auth:sanctum')->group(function () {
-        // Route::get('customerTestDriveRequest', [CustomerController::class, 'getTestDriveRequestList']);
-        // Route::post('customerTestDriveRequest', [CustomerController::class, 'storeTestDriveRequest']);
-        // Route::get('customerDetails', [CustomerController::class, 'getCutomer']);
-        // Route::post('logout', [CustomerController::class, 'logout']);
+        
+        Route::post('logout', [UserController::class, 'logout']);
+
+        // List vehicles for authenticated dealer
+        Route::get('/dealerVechileList', [VehiclesController::class, 'index'])->name('dealer.vehicles.index');
+
+        // Store new vehicle
+        Route::post('/vehicles', [VehiclesController::class, 'store'])->name('dealer.vehicles.store');
+
+        // Update vehicle
+        Route::put('/vehicles/{vehicle}', [VehiclesController::class, 'update'])->name('dealer.vehicles.update');
+        Route::patch('/vehicles/{vehicle}', [VehiclesController::class, 'update'])->name('dealer.vehicles.patch'); // Optional
+
+        // Delete vehicle (soft delete)
+        Route::delete('/vehicles/{vehicle}', [VehiclesController::class, 'destroy'])->name('dealer.vehicles.destroy');
     });
 });

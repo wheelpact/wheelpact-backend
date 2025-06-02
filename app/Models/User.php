@@ -2,16 +2,37 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 
+use App\Models\Branches;
 
-class User extends Model {
+/*
+
+    * Authenticatable model for users in the application.
+    * This model represents the users table and includes various attributes
+    * such as name, email, contact numbers, addresses, and social links.
+    * It uses Laravel's built-in authentication features and can be extended
+    * to include additional functionality as needed.
+    * The User model extends the Authenticatable class, which provides
+    * the necessary methods for user authentication in Laravel.
+    -   getAuthIdentifier() is used to retrieve the unique identifier for the user, 
+    typically the user ID.
+    
+    -   getAuthPassword() is used to retrieve the user's password for authentication.
+    
+    -   getRememberToken() is used to retrieve the "remember me" token for the user.
+    
+    * The User model can be used to manage user data, authenticate users,
+    * and handle user-related operations in the application.
+    
+*/
+
+class User extends Authenticatable {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -73,5 +94,16 @@ class User extends Model {
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function vehicles() {
+        return $this->hasManyThrough(
+            Vehicles::class, // Target model
+            Branches::class,  // Intermediate model
+            'dealer_id',    // Foreign key on branches table
+            'branch_id',    // Foreign key on vehicles table
+            //'id',           // Local key on users table
+            //'id'            // Local key on branches table
+        );
     }
 }
