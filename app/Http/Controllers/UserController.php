@@ -195,9 +195,15 @@ class UserController extends ApiController {
             $existingToken = $user->tokens()->first(); // Get first active token if exists
 
             if ($existingToken) {
+                // Optional: remove existing tokens (enforces single login)
+                $user->tokens()->delete();
+
+                // Create and return new token
+                $newToken = $user->createToken('auth_token')->plainTextToken;
+
                 return response()->json([
                     'message' => 'Already logged in',
-                    'token' => $existingToken->plainTextToken, // Return existing token
+                    'token' => $newToken, // Return existing token
                     'user' => $user,
                 ], 200);
             }

@@ -37,7 +37,6 @@ class VehicleResource extends JsonResource {
 
     public function toArray($request) {
 
-        //return $this->resource->toArray();
         if ($request->routeIs('dealer.vehicles.index')) {
             // Light/summary response for list endpoint
             return [

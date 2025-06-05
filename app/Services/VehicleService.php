@@ -45,4 +45,47 @@ class VehicleService {
     public function deleteVehicle(Vehicles $vehicle) {
         $this->vehicleRepo->delete($vehicle);
     }
+
+    // fetch all vahicle makes
+    public function getAllMakes($vehicleType) {
+        return $this->vehicleRepo->getAllMakes($vehicleType);
+    }
+
+    // fetch all vehicle models for a make & vehicle type
+    public function getVehicleMakeModels($cmp_id, $vehicleType) {
+        return $this->vehicleRepo->getVehicleMakeModels($cmp_id, $vehicleType);
+    }
+
+    // fetch all vehicle variants for a model
+    public function getVehicleModelVariants($model_id) {
+        return $this->vehicleRepo->getVehicleModelVariants($model_id);
+    }
+
+    public function getVehicleBodyTypes($vehicleType) {
+        return $this->vehicleRepo->getVehicleBodyTypes($vehicleType);
+    }
+
+    public function getCountries() {
+        return $this->vehicleRepo->getCountries();
+    }
+
+    public function getStates($countryId) {
+        return $this->vehicleRepo->getStates($countryId);
+    }
+
+    public function getCities($stateId) {
+        return $this->vehicleRepo->getCities($stateId);
+    }
+
+    public function getRTOsByState($stateId) {
+        return $this->vehicleRepo->getRTOsByState($stateId);
+    }
+
+    public function getVehicleFuelTypes() {
+        return $this->vehicleRepo->getVehicleFuelTypes();
+    }
+
+    public function getVehicleTransmissionTypes() {
+        return $this->vehicleRepo->getVehicleTransmissionTypes();
+    }   
 }

@@ -752,6 +752,608 @@
                 ]
             }
         },
+        "/api/dealerApi/v1/form-data/getVehicleMakes": {
+            "get": {
+                "tags": [
+                    "Form Data"
+                ],
+                "summary": "Get All Vehicle Makes - Vehicle Type",
+                "description": "Returns a list of vehicle companies (makes), optionally filtered by vehicle type (1=Car, 2=Bike, 3=Both).",
+                "operationId": "getVehicleMakes",
+                "parameters": [
+                    {
+                        "name": "vehicle_type",
+                        "in": "query",
+                        "description": "Vehicle type filter: 1=Car, 2=Bike, 3=Both",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                1,
+                                2,
+                                3
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of vehicle makes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 12
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Hyundai"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The vehicle_type field is required."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dealerApi/v1/form-data/getVehicleMakeModels": {
+            "get": {
+                "tags": [
+                    "Form Data"
+                ],
+                "summary": "Get Models by Vehicle Make",
+                "description": "Fetches all vehicle models based on selected company (make) and optional vehicle type.",
+                "operationId": "getVehicleMakeModels",
+                "parameters": [
+                    {
+                        "name": "cmp_id",
+                        "in": "query",
+                        "description": "ID of the vehicle company (make)",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 2
+                        }
+                    },
+                    {
+                        "name": "vehicle_type",
+                        "in": "query",
+                        "description": "Optional: Vehicle type filter (1=Car, 2=Bike, 3=Both)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                1,
+                                2,
+                                3
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of vehicle models",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 101
+                                            },
+                                            "cmp_id": {
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "model_name": {
+                                                "type": "string",
+                                                "example": "Swift Dzire"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/dealerApi/v1/form-data/getVehicleModelVariants": {
+            "get": {
+                "tags": [
+                    "Form Data"
+                ],
+                "summary": "Get Variants by Vehicle Model",
+                "description": "Fetches all variants for a specific vehicle model.",
+                "operationId": "getVehicleModelVariants",
+                "parameters": [
+                    {
+                        "name": "model_id",
+                        "in": "query",
+                        "description": "ID of the vehicle model",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 5
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of vehicle model variants",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 201
+                                            },
+                                            "model_id": {
+                                                "type": "integer",
+                                                "example": 5
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "SX (O) Turbo"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/dealerApi/v1/form-data/getVehicleBodyTypes": {
+            "get": {
+                "tags": [
+                    "Form Data"
+                ],
+                "summary": "Get Body Types by Vehicle Type",
+                "description": "Fetches all body types based on vehicle type (1=Car, 2=Bike, 3=Both).",
+                "operationId": "getVehicleBodyTypes",
+                "parameters": [
+                    {
+                        "name": "vehicle_type",
+                        "in": "query",
+                        "description": "Vehicle type filter: 1=Car, 2=Bike, 3=Both",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                1,
+                                2,
+                                3
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of body types",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "SUV"
+                                            },
+                                            "img_body_type": {
+                                                "type": "string",
+                                                "example": "/images/body_types/suv.png"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/dealerApi/v1/form-data/getCountries": {
+            "get": {
+                "tags": [
+                    "Form Data"
+                ],
+                "summary": "Get list of countries",
+                "description": "Returns a list of all countries",
+                "operationId": "getCountries",
+                "responses": {
+                    "200": {
+                        "description": "List of countries retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 101
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "India"
+                                            },
+                                            "short_code": {
+                                                "type": "string",
+                                                "example": "IN"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No countries found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dealerApi/v1/form-data/getStates": {
+            "get": {
+                "tags": [
+                    "Form Data"
+                ],
+                "summary": "Get list of states",
+                "description": "Returns list of states for a given country ID",
+                "operationId": "getStates",
+                "parameters": [
+                    {
+                        "name": "country_id",
+                        "in": "query",
+                        "description": "ID of the country",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 101
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of states retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Maharashtra"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The country_id field is required."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dealerApi/v1/form-data/getCities": {
+            "get": {
+                "tags": [
+                    "Form Data"
+                ],
+                "summary": "Get list of cities",
+                "description": "Returns list of cities for a given state ID",
+                "operationId": "getCities",
+                "parameters": [
+                    {
+                        "name": "state_id",
+                        "in": "query",
+                        "description": "ID of the state",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 21
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of cities retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 203
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Mumbai"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The state_id field is required."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dealerApi/v1/form-data/getRTOsByState": {
+            "get": {
+                "tags": [
+                    "Form Data"
+                ],
+                "summary": "Get RTOs by state",
+                "description": "Returns list of RTOs for a given state ID",
+                "operationId": "getRTOsByState",
+                "parameters": [
+                    {
+                        "name": "state_id",
+                        "in": "query",
+                        "description": "ID of the state",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 21
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of RTOs retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Mumbai RTO"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The state_id field is required."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dealerApi/v1/form-data/getVehicleFuelTypes": {
+            "get": {
+                "tags": [
+                    "Form Data"
+                ],
+                "summary": "Get list of vehicle fuel types",
+                "description": "Returns a list of all vehicle fuel types",
+                "operationId": "getVehicleFuelTypes",
+                "responses": {
+                    "200": {
+                        "description": "List of vehicle fuel types retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Petrol"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No fuel types found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dealerApi/v1/form-data/getVehicleTransmissionTypes": {
+            "get": {
+                "tags": [
+                    "Form Data"
+                ],
+                "summary": "Get list of vehicle transmission types",
+                "description": "Returns a list of all vehicle transmission types",
+                "operationId": "getVehicleTransmissionTypes",
+                "responses": {
+                    "200": {
+                        "description": "List of vehicle transmission types retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Automatic"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No transmission types found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/dealerApi/v1/dealerRegister": {
             "post": {
                 "tags": [
@@ -1064,7 +1666,7 @@
                 ]
             }
         },
-        "/api/dealerApi/v1/vehicles": {
+        "/api/dealerApi/v1/addNewVehicle": {
             "post": {
                 "tags": [
                     "Dealer: Vehicles"
@@ -1104,7 +1706,7 @@
                 ]
             }
         },
-        "/api/dealerApi/v1/vehicles/{vehicle}": {
+        "/api/dealerApi/v1/updateVehicle/{vehicle}": {
             "put": {
                 "tags": [
                     "Dealer: Vehicles"
@@ -1150,12 +1752,14 @@
                         "bearerAuth": []
                     }
                 ]
-            },
+            }
+        },
+        "/api/dealerApi/v1/removeVehicle/{vehicle}": {
             "delete": {
                 "tags": [
                     "Dealer: Vehicles"
                 ],
-                "summary": "Delete Vehicle",
+                "summary": "Delete Vehicle - Remove From Listing",
                 "description": "Soft deletes a vehicle by ID",
                 "operationId": "deleteVehicle",
                 "parameters": [
@@ -1428,6 +2032,10 @@
         {
             "name": "Customers",
             "description": "Customers"
+        },
+        {
+            "name": "Form Data",
+            "description": "Form Data"
         },
         {
             "name": "Dealer: Registration/Login",

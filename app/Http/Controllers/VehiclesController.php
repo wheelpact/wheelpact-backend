@@ -10,6 +10,7 @@ use App\Http\Requests\Dealer\StoreVehicleRequest;
 use App\Http\Requests\Dealer\UpdateVehicleRequest;
 use App\Resources\VehicleResource;
 use App\Services\VehicleService;
+
 use App\Models\Vehicles;
 
 use Exception;
@@ -91,7 +92,7 @@ class VehiclesController extends Controller {
     }
     /**
      * @OA\Post(
-     *     path="/api/dealerApi/v1/vehicles",
+     *     path="/api/dealerApi/v1/addNewVehicle",
      *     summary="Add New Vehicle - Dealer",
      *     description="Add a new vehicle for logged-in dealer.",
      *     operationId="storeVehicle",
@@ -116,7 +117,7 @@ class VehiclesController extends Controller {
 
     /**
      * @OA\Put(
-     *     path="/api/dealerApi/v1/vehicles/{vehicle}",
+     *     path="/api/dealerApi/v1/updateVehicle/{vehicle}",
      *     summary="Update vehicle",
      *     description="Update a specific vehicle details",
      *     operationId="updateVehicle",
@@ -148,8 +149,8 @@ class VehiclesController extends Controller {
 
     /**
      * @OA\Delete(
-     *     path="/api/dealerApi/v1/vehicles/{vehicle}",
-     *     summary="Delete Vehicle",
+     *     path="/api/dealerApi/v1/removeVehicle/{vehicle}",
+     *     summary="Delete Vehicle - Remove From Listing",
      *     description="Soft deletes a vehicle by ID",
      *     operationId="deleteVehicle",
      *     tags={"Dealer: Vehicles"},
@@ -174,4 +175,5 @@ class VehiclesController extends Controller {
         $this->vehicleService->deleteVehicle($vehicle);
         return response()->json(['message' => 'Vehicle soft deleted successfully']);
     }
+    
 }

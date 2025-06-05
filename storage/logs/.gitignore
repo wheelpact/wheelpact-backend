@@ -1,2 +1,40 @@
-*
-!.gitignore
+# Laravel-specific files
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+/storage/app/public
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*.log
+
+# Environment and config files
+.env
+.env.*.backup
+.env.backup
+.phpunit.result.cache
+
+# Laravel Telescope
+storage/telescope
+
+# Laravel Horizon
+horizon.log
+
+# IDE & OS-specific
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Composer related
+composer.lock
+
+# NPM / Yarn log

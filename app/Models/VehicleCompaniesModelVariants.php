@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class VehicleCompaniesModelVariants extends Model
-{
+class VehicleCompaniesModelVariants extends Model {
     /** @use HasFactory<\Database\Factories\VehicleCompaniesModelVariantsFactory> */
     use HasFactory;
 
@@ -20,4 +19,8 @@ class VehicleCompaniesModelVariants extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    public function model() {
+        return $this->belongsTo(VehicleCompanyModel::class, 'model_id', 'id');
+    }
 }

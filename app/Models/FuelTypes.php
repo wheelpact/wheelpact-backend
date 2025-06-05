@@ -11,7 +11,7 @@ class FuelTypes extends Model {
 
     protected $table = 'fueltypes';
     protected $fillable = [
-        'name',
+        'title',
         'created_at',
         'updated_at',
         'deleted_at'

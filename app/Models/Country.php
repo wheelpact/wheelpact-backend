@@ -12,7 +12,7 @@ class Country extends Model {
     protected $table = 'countries';
 
     protected $fillable = [
-        'sortname',
+        'shortname',
         'name',
         'phonecode',
         'created_at',

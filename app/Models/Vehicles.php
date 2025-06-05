@@ -4,27 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\VehicleCompanies as VehicleCompany;
-use App\Models\VehicleType;
-use App\Models\VehicleBodyTypes;
-use App\Models\FuelTypes;
-use App\Models\Branches;
-use App\Models\Indiarto;
-use App\Models\Country;
-use App\Models\State;
-use App\Models\City;
-use App\Models\VehicleCompanyModel;
-use App\Models\Transmission;
-use App\Models\VehicleImages;
-use App\Models\VehicleCompaniesModelVariants;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vehicles extends Model {
     use HasFactory, SoftDeletes;
 
-    protected $dates = ['deleted_at'];
     protected $table = 'vehicles';
     protected $primaryKey = 'id';
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'unique_id',
@@ -101,66 +88,42 @@ class Vehicles extends Model {
         'deleted_at'
     ];
 
-    public function branches() {
-        return $this->belongsTo(Branches::class, 'branch_id', 'id');
+    // Relationships
+
+    public function branch() {
+        return $this->belongsTo(Branches::class, 'branch_id');
     }
 
-    /**
-     * Get the vehicle company associated with the vehicle. defined in table vehiclecompanies
-     */
     public function vehicleCompany() {
-        return $this->belongsTo(VehicleCompany::class, 'cmp_id', 'id');
+        return $this->belongsTo(VehicleCompanies::class, 'cmp_id');
     }
 
-    /**
-     * Get the vehicle model associated with the vehicle. defined in table vehiclecompaniesmodels
-     */
     public function model() {
-        return $this->belongsTo(VehicleCompanyModel::class, 'model_id', 'id');
+        return $this->belongsTo(VehicleCompanyModel::class, 'model_id');
     }
 
-    /**
-     * Get the vehicle variant associated with the vehicle. defined in table vehiclecompaniesmodelvariants
-     */
     public function variant() {
-        return $this->belongsTo(VehicleCompaniesModelVariants::class, 'variant_id', 'id');
+        return $this->belongsTo(VehicleCompaniesModelVariants::class, 'variant_id');
     }
 
-    /**
-     * Get the vehicle fuel type associated with the vehicle. defined in table fueltypes
-     */
     public function fuelType() {
-        return $this->belongsTo(FuelTypes::class, 'fuel_type', 'id');
+        return $this->belongsTo(FuelTypes::class, 'fuel_type');
     }
-
-    // public function getVehicleTypeNameAttribute() {
-    //     $types = config('constants.VEHICLE_TYPES');
-    //     return $types[$this->vehicle_type] ?? 'Unknown';
-    // }
 
     public function vehicleType() {
-        return $this->belongsTo(VehicleType::class, 'vehicle_type', 'id');
+        return $this->belongsTo(VehicleType::class, 'vehicle_type');
     }
 
     public function bodyType() {
-        return $this->belongsTo(VehicleBodyTypes::class, 'body_type', 'id');
+        return $this->belongsTo(VehicleBodyTypes::class, 'body_type');
     }
 
     public function country() {
-        return $this->belongsTo(Country::class, 'country_id', 'id');
+        return $this->belongsTo(Country::class, 'country_id');
     }
 
     public function state() {
-        return $this->belongsTo(State::class, 'registered_state_id', 'id');
-    }
-
-    
-    // public function city() {
-    //     return $this->belongsTo(City::class, 'city_id', 'id');
-    // }
-
-    public function images() {
-        return $this->hasOne(VehicleImages::class, 'vehicle_id');
+        return $this->belongsTo(State::class, 'registered_state_id');
     }
 
     public function registeredState() {
@@ -175,5 +138,7 @@ class Vehicles extends Model {
         return $this->belongsTo(Transmission::class, 'transmission_id');
     }
 
-
+    public function images() {
+        return $this->hasOne(VehicleImages::class, 'vehicle_id');
+    }
 }
