@@ -106,4 +106,8 @@ class User extends Authenticatable {
             //'id'            // Local key on branches table
         );
     }
+    // User.php (Dealer)
+    public function branches() {
+        return $this->hasMany(Branches::class, 'dealer_id');
+    }
 }

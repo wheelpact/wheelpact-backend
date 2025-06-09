@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Vehicles;
 use App\Repositories\VehicleRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class VehicleService {
     protected $vehicleRepo;
@@ -17,28 +18,49 @@ class VehicleService {
         return $this->vehicleRepo->listVehiclesByUser($user, 5);
     }
 
+
     public function createVehicle(array $data, $images = []) {
         return DB::transaction(function () use ($data, $images) {
             $vehicle = $this->vehicleRepo->create($data);
 
             if (!empty($images)) {
-                // handle vehicleimages table logic
-                $vehicle->images()->create($images); // assuming hasOne relation
+                $vehicle->images()->createMany($images);
             }
 
             return $vehicle;
         });
     }
 
-    public function updateVehicle(Vehicles $vehicle, array $data, $images = []) {
+    public function storeImagesNewVehicle($vehicleId, array $data) {
+        return $this->vehicleRepo->storeImagesNewVehicle($vehicleId, $data);
+    }
+
+    public function updateVehicle(Vehicles $vehicle, array $data, array $images = []): Vehicles {
+
+        DB::enableQueryLog();
+
         return DB::transaction(function () use ($vehicle, $data, $images) {
-            $this->vehicleRepo->update($vehicle, $data);
+            Log::info('Starting vehicle update transaction', ['vehicle_id' => $vehicle->id]);
+
+            $updatedVehicle = $this->vehicleRepo->update($vehicle, $data);
 
             if (!empty($images)) {
-                $vehicle->images()->updateOrCreate(['vehicle_id' => $vehicle->id], $images);
+                Log::info('Updating/creating vehicle images', [
+                    'vehicle_id' => $vehicle->id,
+                    'images' => $images,
+                ]);
+
+                $vehicle->images()->updateOrCreate(
+                    ['vehicle_id' => $vehicle->id],
+                    $images
+                );
             }
 
-            return $vehicle;
+            // Log all queries executed in this transaction
+            $queries = DB::getQueryLog();
+            Log::info('Executed SQL queries in updateVehicle:', $queries);
+
+            return $updatedVehicle;
         });
     }
 
@@ -87,5 +109,5 @@ class VehicleService {
 
     public function getVehicleTransmissionTypes() {
         return $this->vehicleRepo->getVehicleTransmissionTypes();
-    }   
+    }
 }

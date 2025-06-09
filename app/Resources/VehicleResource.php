@@ -86,6 +86,99 @@ class VehicleResource extends JsonResource {
                 'indian_rto_place' =>  $this->indiarto->place ?? null
             ];
         }
+
+        if ($request->routeIs('dealer.vehicles.store')) {
+            return [
+                'id' => $this->id,
+                'unique_id' => $this->unique_id,
+                'vehicle_type' => $this->vehicle_type,
+                'branch_id' => $this->branch_id,
+                'cmp_id' => $this->cmp_id,
+                'model_id' => $this->model_id,
+                'variant_id' => $this->variant_id,
+                'fuel_type' => $this->fuel_type,
+                'body_type' => $this->body_type,
+                'mileage' => $this->mileage,
+                'kms_driven' => $this->kms_driven,
+                'owner' => $this->owner,
+                'transmission_id' => $this->transmission_id,
+                'color_id' => $this->color_id,
+                'featured_status' => $this->featured_status,
+                'search_keywords' => $this->search_keywords,
+                'onsale_status' => $this->onsale_status,
+                'onsale_percentage' => $this->onsale_percentage,
+                'manufacture_year' => $this->manufacture_year,
+                'registration_year' => $this->registration_year,
+                'registered_state_id' => $this->registered_state_id,
+                'rto' => $this->rto,
+                'insurance_type' => $this->insurance_type,
+                'insurance_validity' => $this->insurance_validity,
+                'accidental_status' => $this->accidental_status,
+                'flooded_status' => $this->flooded_status,
+                'last_service_kms' => $this->last_service_kms,
+                'last_service_date' => $this->last_service_date,
+                'pricing' => [
+                    'regular_price' => $this->regular_price,
+                    'selling_price' => $this->selling_price,
+                    'pricing_type' => $this->pricing_type,
+                    'emi_option' => $this->emi_option,
+                    'avg_interest_rate' => $this->avg_interest_rate,
+                    'tenure_months' => $this->tenure_months,
+                    'reservation_amt' => $this->reservation_amt,
+                ],
+                'thumbnail_url' => asset('storage/' . $this->thumbnail_path),
+
+                // Conditional Blocks
+                'car_features' => $this->vehicle_type == 1 ? [
+                    'no_of_airbags' => $this->car_no_of_airbags,
+                    'central_locking' => $this->car_central_locking,
+                    'seat_upholstery' => $this->car_seat_upholstery,
+                    'sunroof' => $this->car_sunroof,
+                    'integrated_music_system' => $this->car_integrated_music_system,
+                    'rear_ac' => $this->car_rear_ac,
+                    'orvm' => $this->car_outside_rear_view_mirrors,
+                    'power_windows' => $this->car_power_windows,
+                    'engine_start_stop' => $this->car_engine_start_stop,
+                    'headlamps' => $this->car_headlamps,
+                    'power_steering' => $this->car_power_steering,
+                ] : null,
+
+                'bike_features' => $this->vehicle_type == 2 ? [
+                    'headlight_type' => $this->bike_headlight_type,
+                    'odometer' => $this->bike_odometer,
+                    'drl' => $this->bike_drl,
+                    'mobile_connectivity' => $this->bike_mobile_connectivity,
+                    'gps_navigation' => $this->bike_gps_navigation,
+                    'usb_charging_port' => $this->bike_usb_charging_port,
+                    'low_battery_indicator' => $this->bike_low_battery_indicator,
+                    'under_seat_storage' => $this->bike_under_seat_storage,
+                    'speedometer' => $this->bike_speedometer,
+                    'stand_alarm' => $this->bike_stand_alarm,
+                    'low_fuel_indicator' => $this->bike_low_fuel_indicator,
+                    'low_oil_indicator' => $this->bike_low_oil_indicator,
+                    'start_type' => $this->bike_start_type,
+                    'kill_switch' => $this->bike_kill_switch,
+                    'break_light' => $this->bike_break_light,
+                    'turn_signal_indicator' => $this->bike_turn_signal_indicator,
+                ] : null,
+
+                'status' => [
+                    'is_active' => $this->is_active,
+                    'is_admin_approved' => $this->is_admin_approved,
+                    'sold_reason' => $this->soldReason,
+                ],
+                'created_by' => $this->created_by,
+                'updated_by' => $this->updated_by,
+                'admin_approval_dt' => $this->admin_approval_dt,
+                'created_at' => $this->created_at,
+            ];
+        }
+
+        
+
+        // Fallback
+        return parent::toArray($request);
+
         //     return [
         //         'id' => $this->id,
         //         'unique_id' => $this->unique_id,

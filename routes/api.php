@@ -70,8 +70,13 @@ Route::prefix('dealerApi/v1')->middleware(['allowed_ip'])->group(function () {
         // Store new vehicle
         Route::post('/addNewVehicle', [VehiclesController::class, 'store'])->name('dealer.vehicles.store');
 
+        // Add new vehicle images
+        // This route is used to upload images for a new vehicle
+        Route::post('/addNewVehicleImages/{vehicleId}/images', [VehiclesController::class, 'storeVehicleImages']);
+
         // Update vehicle
         Route::put('/updateVehicle/{vehicle}', [VehiclesController::class, 'update'])->name('dealer.vehicles.update');
+       
         // Alternative update route using PATCH
         // This is optional and can be used if you want to allow partial updates
         Route::patch('/vehicle/{vehicle}', [VehiclesController::class, 'update'])->name('dealer.vehicles.patch'); // Optional

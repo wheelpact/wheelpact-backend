@@ -1672,14 +1672,421 @@
                     "Dealer: Vehicles"
                 ],
                 "summary": "Add New Vehicle - Dealer",
-                "description": "Add a new vehicle for logged-in dealer.",
+                "description": "Add details of new vehicle (Car or Bike) for the logged-in dealer.",
                 "operationId": "storeVehicle",
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
-                                "$ref": "#/components/schemas/StoreVehicleRequest"
+                                "required": [
+                                    "branch_id",
+                                    "vehicle_type",
+                                    "cmp_id",
+                                    "model_id",
+                                    "variant_id",
+                                    "fuel_type",
+                                    "mileage",
+                                    "kms_driven",
+                                    "owner",
+                                    "featured_status",
+                                    "onsale_status",
+                                    "manufacture_year",
+                                    "registration_year",
+                                    "registered_state_id",
+                                    "rto",
+                                    "insurance_type",
+                                    "accidental_status",
+                                    "flooded_status",
+                                    "last_service_kms",
+                                    "is_active",
+                                    "thumbnail_url"
+                                ],
+                                "properties": {
+                                    "vehicle_type": {
+                                        "description": "1=Car, 2=Bike",
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 1
+                                    },
+                                    "branch_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "cmp_id": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "model_id": {
+                                        "type": "integer",
+                                        "example": 101
+                                    },
+                                    "variant_id": {
+                                        "type": "integer",
+                                        "example": 202
+                                    },
+                                    "fuel_type": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "mileage": {
+                                        "type": "number",
+                                        "example": 18.5
+                                    },
+                                    "kms_driven": {
+                                        "type": "integer",
+                                        "example": 25000
+                                    },
+                                    "owner": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "featured_status": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 1
+                                    },
+                                    "onsale_status": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 1
+                                    },
+                                    "manufacture_year": {
+                                        "type": "integer",
+                                        "example": 2020
+                                    },
+                                    "registration_year": {
+                                        "type": "integer",
+                                        "example": 2021
+                                    },
+                                    "registered_state_id": {
+                                        "type": "integer",
+                                        "example": 14
+                                    },
+                                    "rto": {
+                                        "type": "integer",
+                                        "example": "539"
+                                    },
+                                    "insurance_type": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 1
+                                    },
+                                    "insurance_validity": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-05-31"
+                                    },
+                                    "accidental_status": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 2
+                                    },
+                                    "flooded_status": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 2
+                                    },
+                                    "last_service_kms": {
+                                        "type": "integer",
+                                        "example": 24000
+                                    },
+                                    "is_active": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2,
+                                            3,
+                                            4
+                                        ],
+                                        "example": 1
+                                    },
+                                    "thumbnail_url": {
+                                        "description": "Vehicle thumbnail image",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "onsale_percentage": {
+                                        "type": "number",
+                                        "example": 10.5
+                                    },
+                                    "search_keywords": {
+                                        "type": "string",
+                                        "example": "SUV, black, 2020"
+                                    },
+                                    "last_service_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-12-10"
+                                    },
+                                    "regular_price": {
+                                        "type": "number",
+                                        "example": 550000
+                                    },
+                                    "selling_price": {
+                                        "type": "number",
+                                        "example": 520000
+                                    },
+                                    "pricing_type": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 2
+                                    },
+                                    "emi_option": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 1
+                                    },
+                                    "avg_interest_rate": {
+                                        "type": "number",
+                                        "example": 10.5
+                                    },
+                                    "tenure_months": {
+                                        "type": "integer",
+                                        "example": 36
+                                    },
+                                    "reservation_amt": {
+                                        "type": "integer",
+                                        "example": 5000
+                                    },
+                                    "is_admin_approved": {
+                                        "type": "string",
+                                        "enum": [
+                                            "0",
+                                            "1"
+                                        ],
+                                        "example": "0"
+                                    },
+                                    "soldReason": {
+                                        "type": "string",
+                                        "example": "Customer request"
+                                    },
+                                    "updated_by": {
+                                        "type": "integer",
+                                        "example": 12
+                                    },
+                                    "transmission_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "body_type": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "car_no_of_airbags": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "car_central_locking": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "car_seat_upholstery": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_sunroof": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_integrated_music_system": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_rear_ac": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_outside_rear_view_mirrors": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_power_windows": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_engine_start_stop": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_headlamps": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_power_steering": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_headlight_type": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_odometer": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_drl": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_mobile_connectivity": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_gps_navigation": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_usb_charging_port": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_low_battery_indicator": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_under_seat_storage": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_speedometer": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_stand_alarm": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_low_fuel_indicator": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_low_oil_indicator": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_start_type": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "bike_kill_switch": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_break_light": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_turn_signal_indicator": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
@@ -1696,7 +2103,285 @@
                         }
                     },
                     "422": {
-                        "description": "Validation Error"
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/dealerApi/v1/addNewVehicleImages/{vehicleId}/images": {
+            "post": {
+                "tags": [
+                    "Dealer: Vehicles"
+                ],
+                "summary": "Upload detailed vehicle images",
+                "description": "Uploads all required vehicle image fields and stores them in the vehicleimages table.",
+                "operationId": "f9fff5303cbb3b2ebac5e8971fd7c56f",
+                "parameters": [
+                    {
+                        "name": "vehicleId",
+                        "in": "path",
+                        "description": "ID of the vehicle",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "exterior_main_front_img"
+                                ],
+                                "properties": {
+                                    "exterior_main_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_right_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_left_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_tank_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_handlebar_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_headlight_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_tail_light_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_speedometer_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_exhaust_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_seat_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_roof_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_bonetopen_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_engine_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_diagnoal_right_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_diagnoal_right_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_diagnoal_left_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_diagnoal_left_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_rear_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_right_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_right_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_left_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_left_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_spare_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_right_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_right_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_left_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_left_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_underbody_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_underbody_rear_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_underbody_right_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_underbody_left_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_dashboard_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_infotainment_system_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_steering_wheel_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_odometer_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_gear_lever_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_pedals_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_front_cabin_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_mid_cabin_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_rear_cabin_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_driver_side_door_panel_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_driver_side_adjustment_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_boot_inside_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_boot_door_open_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "others_keys_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Images uploaded successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Images uploaded successfully."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Image upload failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Image upload failed."
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Exception message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -1707,12 +2392,12 @@
             }
         },
         "/api/dealerApi/v1/updateVehicle/{vehicle}": {
-            "put": {
+            "post": {
                 "tags": [
                     "Dealer: Vehicles"
                 ],
-                "summary": "Update vehicle",
-                "description": "Update a specific vehicle details",
+                "summary": "Update Vehicle - Dealer",
+                "description": "Update vehicle details (Car or Bike) for the logged-in dealer. Use multipart/form-data with _method=PUT.",
                 "operationId": "updateVehicle",
                 "parameters": [
                     {
@@ -1728,9 +2413,372 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
-                                "$ref": "#/components/schemas/UpdateVehicleRequest"
+                                "properties": {
+                                    "_method": {
+                                        "type": "string",
+                                        "example": "PUT"
+                                    },
+                                    "cmp_id": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "model_id": {
+                                        "type": "integer",
+                                        "example": 101
+                                    },
+                                    "variant_id": {
+                                        "type": "integer",
+                                        "example": 202
+                                    },
+                                    "fuel_type": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "mileage": {
+                                        "type": "number",
+                                        "example": 18.5
+                                    },
+                                    "kms_driven": {
+                                        "type": "integer",
+                                        "example": 25000
+                                    },
+                                    "owner": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "featured_status": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 1
+                                    },
+                                    "onsale_status": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 1
+                                    },
+                                    "manufacture_year": {
+                                        "type": "integer",
+                                        "example": 2020
+                                    },
+                                    "registration_year": {
+                                        "type": "integer",
+                                        "example": 2021
+                                    },
+                                    "registered_state_id": {
+                                        "type": "integer",
+                                        "example": 14
+                                    },
+                                    "rto": {
+                                        "type": "string",
+                                        "example": "539"
+                                    },
+                                    "insurance_type": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 1
+                                    },
+                                    "insurance_validity": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-05-31"
+                                    },
+                                    "accidental_status": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 2
+                                    },
+                                    "flooded_status": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 2
+                                    },
+                                    "last_service_kms": {
+                                        "type": "integer",
+                                        "example": 24000
+                                    },
+                                    "is_active": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2,
+                                            3,
+                                            4
+                                        ],
+                                        "example": 1
+                                    },
+                                    "thumbnail_url": {
+                                        "description": "Vehicle thumbnail image",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "onsale_percentage": {
+                                        "type": "number",
+                                        "example": 10.5
+                                    },
+                                    "search_keywords": {
+                                        "type": "string",
+                                        "example": "SUV, black, 2020"
+                                    },
+                                    "last_service_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-12-10"
+                                    },
+                                    "regular_price": {
+                                        "type": "number",
+                                        "example": 550000
+                                    },
+                                    "selling_price": {
+                                        "type": "number",
+                                        "example": 520000
+                                    },
+                                    "pricing_type": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 2
+                                    },
+                                    "emi_option": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 1
+                                    },
+                                    "avg_interest_rate": {
+                                        "type": "number",
+                                        "example": 10.5
+                                    },
+                                    "tenure_months": {
+                                        "type": "integer",
+                                        "example": 36
+                                    },
+                                    "reservation_amt": {
+                                        "type": "integer",
+                                        "example": 5000
+                                    },
+                                    "soldReason": {
+                                        "type": "string",
+                                        "example": "Customer request"
+                                    },
+                                    "transmission_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "body_type": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "car_no_of_airbags": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "car_central_locking": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "car_seat_upholstery": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_sunroof": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_integrated_music_system": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_rear_ac": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_outside_rear_view_mirrors": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_power_windows": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_engine_start_stop": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_headlamps": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "car_power_steering": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_headlight_type": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_odometer": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_drl": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_mobile_connectivity": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_gps_navigation": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_usb_charging_port": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_low_battery_indicator": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_under_seat_storage": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_speedometer": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_stand_alarm": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_low_fuel_indicator": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_low_oil_indicator": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_start_type": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "bike_kill_switch": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_break_light": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "bike_turn_signal_indicator": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
@@ -1745,6 +2793,9 @@
                                 }
                             }
                         }
+                    },
+                    "422": {
+                        "description": "Validation error"
                     }
                 },
                 "security": [
@@ -1827,40 +2878,6 @@
                 },
                 "type": "object"
             },
-            "StoreVehicleRequest": {
-                "required": [
-                    "branch_id",
-                    "vehicle_type",
-                    "cmp_id"
-                ],
-                "properties": {
-                    "branch_id": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "vehicle_type": {
-                        "type": "integer",
-                        "example": 2
-                    },
-                    "cmp_id": {
-                        "type": "integer",
-                        "example": 4
-                    },
-                    "model_id": {
-                        "type": "integer",
-                        "example": 7
-                    },
-                    "fuel_type": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "thumbnail_url": {
-                        "type": "string",
-                        "format": "binary"
-                    }
-                },
-                "type": "object"
-            },
             "UpdateVehicleRequest": {
                 "title": "Update Vehicle Request",
                 "description": "Request body for updating a vehicle",
@@ -1871,8 +2888,13 @@
                 ],
                 "properties": {
                     "vehicle_type": {
-                        "type": "string",
-                        "example": "car"
+                        "description": "1=Car, 2=Bike",
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ],
+                        "example": 1
                     },
                     "cmp_id": {
                         "type": "integer",
@@ -1922,8 +2944,307 @@
                         "example": 920000
                     },
                     "is_active": {
-                        "type": "boolean",
-                        "example": true
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2,
+                            3,
+                            4
+                        ]
+                    },
+                    "onsale_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "onsale_percentage": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 10.5
+                    },
+                    "search_keywords": {
+                        "type": "string",
+                        "example": "SUV, black, 2020"
+                    },
+                    "insurance_type": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "insurance_validity": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "accidental_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "flooded_status": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "last_service_kms": {
+                        "type": "integer"
+                    },
+                    "last_service_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "reservation_amt": {
+                        "type": "integer"
+                    },
+                    "pricing_type": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "emi_option": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "avg_interest_rate": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "tenure_months": {
+                        "type": "integer"
+                    },
+                    "soldReason": {
+                        "type": "string"
+                    },
+                    "is_admin_approved": {
+                        "type": "string",
+                        "enum": [
+                            "0",
+                            "1"
+                        ]
+                    },
+                    "updated_by": {
+                        "type": "integer"
+                    },
+                    "thumbnail_url": {
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "branch_id": {
+                        "type": "integer"
+                    },
+                    "rto": {
+                        "type": "string"
+                    },
+                    "registered_state_id": {
+                        "type": "integer"
+                    },
+                    "owner": {
+                        "type": "integer"
+                    },
+                    "transmission_id": {
+                        "type": "integer"
+                    },
+                    "body_type": {
+                        "type": "integer"
+                    },
+                    "car_no_of_airbags": {
+                        "type": "integer"
+                    },
+                    "car_central_locking": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2,
+                            3
+                        ]
+                    },
+                    "car_seat_upholstery": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "car_sunroof": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "car_integrated_music_system": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "car_rear_ac": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "car_outside_rear_view_mirrors": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "car_power_windows": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "car_engine_start_stop": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "car_headlamps": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "car_power_steering": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_headlight_type": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_odometer": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_drl": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_mobile_connectivity": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_gps_navigation": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_usb_charging_port": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_low_battery_indicator": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_under_seat_storage": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_speedometer": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_stand_alarm": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_low_fuel_indicator": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_low_oil_indicator": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_start_type": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2,
+                            3
+                        ]
+                    },
+                    "bike_kill_switch": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_break_light": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
+                    },
+                    "bike_turn_signal_indicator": {
+                        "type": "integer",
+                        "enum": [
+                            1,
+                            2
+                        ]
                     }
                 },
                 "type": "object"

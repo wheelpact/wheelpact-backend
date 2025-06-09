@@ -22,7 +22,7 @@ class AllowedIpMiddleware {
         // $requestIp = $request->ip();
         // Log the IP to storage/logs/laravel.log
         // Log::info("Request IP: " . $requestIp);
-
+	// echo $request->ip(); die;
         // Get the request IP
         $requestIp = $request->ip();
 
