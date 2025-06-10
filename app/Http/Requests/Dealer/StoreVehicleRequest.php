@@ -33,7 +33,7 @@ class StoreVehicleRequest extends FormRequest {
             'mileage' => 'required|numeric',
             'kms_driven' => 'required|integer',
             'owner' => 'required|integer',
-            'color_id' => 'required|integer',
+            'color_id' => 'nullable|integer',
             'featured_status' => 'required|in:1,2',
             'onsale_status' => 'required|in:1,2',
             'manufacture_year' => 'required|digits:4',
@@ -45,7 +45,7 @@ class StoreVehicleRequest extends FormRequest {
             'flooded_status' => 'required|in:1,2',
             'last_service_kms' => 'required|integer',
             'is_active' => 'required|in:1,2,3,4',
-            'created_by' => 'required|integer',
+            'created_by' => 'nullable|integer',
             'thumbnail_url' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }

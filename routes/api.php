@@ -63,26 +63,26 @@ Route::prefix('dealerApi/v1')->middleware(['allowed_ip'])->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('logout', [UserController::class, 'logout']);
+        // Authenticated Dealer Vehicle Routes
+        Route::prefix('vehicles')->group(function () {
+            // List vehicles
+            Route::get('/', [VehiclesController::class, 'index'])->name('dealer.vehicles.index');
 
-        // List vehicles for authenticated dealer
-        Route::get('/dealerVechileList', [VehiclesController::class, 'index'])->name('dealer.vehicles.index');
+            // Create new vehicle
+            Route::post('/', [VehiclesController::class, 'store'])->name('dealer.vehicles.store');
 
-        // Store new vehicle
-        Route::post('/addNewVehicle', [VehiclesController::class, 'store'])->name('dealer.vehicles.store');
+            // Upload images for a new vehicle
+            Route::post('{vehicle}/images', [VehiclesController::class, 'storeVehicleImages'])->name('dealer.vehicles.images.store');
 
-        // Add new vehicle images
-        // This route is used to upload images for a new vehicle
-        Route::post('/addNewVehicleImages/{vehicleId}/images', [VehiclesController::class, 'storeVehicleImages']);
+            // Update existing vehicle details
+            Route::put('{vehicle}', [VehiclesController::class, 'updateVehicledetails'])->name('dealer.vehicles.update');
 
-        // Update vehicle
-        Route::put('/updateVehicle/{vehicle}', [VehiclesController::class, 'update'])->name('dealer.vehicles.update');
-       
-        // Alternative update route using PATCH
-        // This is optional and can be used if you want to allow partial updates
-        Route::patch('/vehicle/{vehicle}', [VehiclesController::class, 'update'])->name('dealer.vehicles.patch'); // Optional
+            // Update existing vehicle images
+            Route::post('{vehicle}/update-images', [VehiclesController::class, 'updateVehicleImages'])->name('dealer.vehicles.images.update');
 
-        // Delete vehicle (soft delete)
-        Route::delete('/removeVehicle/{vehicle}', [VehiclesController::class, 'destroy'])->name('dealer.vehicles.destroy');
+            // Soft delete vehicle
+            Route::delete('{vehicle}', [VehiclesController::class, 'destroy'])->name('dealer.vehicles.destroy');
+        });
     });
 
     // public data for vehicle forms & front website

@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->integer('kms_driven')->nullable()->comment('in kms');
             $table->integer('owner')->nullable()->comment('1=First Owner, 2=Second Owner, 3=Third Owner, 4=Fourth Owner, 5=Fifth Owner');
             $table->unsignedBigInteger('transmission_id')->nullable()->comment('foriegn key of transmission table');
-            $table->unsignedBigInteger('color_id');
+            $table->unsignedBigInteger('color_id')->nullable()->comment('foriegn key of color table');
             $table->unsignedTinyInteger('featured_status')->comment('1=Yes, 2=No');
             $table->text('search_keywords')->nullable();
             $table->unsignedTinyInteger('onsale_status')->comment('1=yes, 2=no');

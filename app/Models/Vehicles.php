@@ -141,4 +141,8 @@ class Vehicles extends Model {
     public function images() {
         return $this->hasOne(VehicleImages::class, 'vehicle_id');
     }
+
+    public static function imageFields(): array {
+        return VehicleImages::imageFields();
+    }
 }

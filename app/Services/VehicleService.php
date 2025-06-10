@@ -7,9 +7,13 @@ use App\Repositories\VehicleRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+use App\Models\VehicleImages;
+
+
 class VehicleService {
     protected $vehicleRepo;
 
+    
     public function __construct(VehicleRepository $vehicleRepo) {
         $this->vehicleRepo = $vehicleRepo;
     }
@@ -35,33 +39,25 @@ class VehicleService {
         return $this->vehicleRepo->storeImagesNewVehicle($vehicleId, $data);
     }
 
-    public function updateVehicle(Vehicles $vehicle, array $data, array $images = []): Vehicles {
-
-        DB::enableQueryLog();
+    public function updateVehicledetails(Vehicles $vehicle, array $data, array $images = []): Vehicles {
 
         return DB::transaction(function () use ($vehicle, $data, $images) {
-            Log::info('Starting vehicle update transaction', ['vehicle_id' => $vehicle->id]);
-
-            $updatedVehicle = $this->vehicleRepo->update($vehicle, $data);
+            $updatedVehicle = $this->vehicleRepo->updateVehicledetails($vehicle, $data);
 
             if (!empty($images)) {
-                Log::info('Updating/creating vehicle images', [
-                    'vehicle_id' => $vehicle->id,
-                    'images' => $images,
-                ]);
-
                 $vehicle->images()->updateOrCreate(
                     ['vehicle_id' => $vehicle->id],
                     $images
                 );
             }
 
-            // Log all queries executed in this transaction
-            $queries = DB::getQueryLog();
-            Log::info('Executed SQL queries in updateVehicle:', $queries);
-
             return $updatedVehicle;
         });
+    }
+
+
+    public function updateVehicleImages(int $vehicleId, array $data): VehicleImages {
+        return $this->vehicleRepo->updateVehicleImages($vehicleId, $data);
     }
 
     public function deleteVehicle(Vehicles $vehicle) {

@@ -1599,7 +1599,7 @@
                 }
             }
         },
-        "/api/dealerApi/v1/dealerVechileList": {
+        "/api/dealerApi/v1/vehicles": {
             "get": {
                 "tags": [
                     "Dealer: Vehicles"
@@ -1664,9 +1664,7 @@
                         "bearerAuth": []
                     }
                 ]
-            }
-        },
-        "/api/dealerApi/v1/addNewVehicle": {
+            },
             "post": {
                 "tags": [
                     "Dealer: Vehicles"
@@ -2113,14 +2111,14 @@
                 ]
             }
         },
-        "/api/dealerApi/v1/addNewVehicleImages/{vehicleId}/images": {
+        "/api/dealerApi/v1/vehicles/{vehicleId}/images": {
             "post": {
                 "tags": [
                     "Dealer: Vehicles"
                 ],
                 "summary": "Upload detailed vehicle images",
                 "description": "Uploads all required vehicle image fields and stores them in the vehicleimages table.",
-                "operationId": "f9fff5303cbb3b2ebac5e8971fd7c56f",
+                "operationId": "752969d9b11fa039d58212044527b8c2",
                 "parameters": [
                     {
                         "name": "vehicleId",
@@ -2391,14 +2389,14 @@
                 ]
             }
         },
-        "/api/dealerApi/v1/updateVehicle/{vehicle}": {
+        "/api/dealerApi/v1/vehicles/{vehicle}": {
             "post": {
                 "tags": [
                     "Dealer: Vehicles"
                 ],
                 "summary": "Update Vehicle - Dealer",
                 "description": "Update vehicle details (Car or Bike) for the logged-in dealer. Use multipart/form-data with _method=PUT.",
-                "operationId": "updateVehicle",
+                "operationId": "updateVehicledetails",
                 "parameters": [
                     {
                         "name": "vehicle",
@@ -2803,9 +2801,7 @@
                         "bearerAuth": []
                     }
                 ]
-            }
-        },
-        "/api/dealerApi/v1/removeVehicle/{vehicle}": {
+            },
             "delete": {
                 "tags": [
                     "Dealer: Vehicles"
@@ -2842,6 +2838,333 @@
                     },
                     "404": {
                         "description": "Vehicle not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/dealerApi/v1/vehicles/{vehicle}/update-images": {
+            "post": {
+                "tags": [
+                    "Dealer: Vehicles"
+                ],
+                "summary": "Update vehicle images",
+                "description": "Allows an authenticated dealer to update a vehicle's detailed information and upload multiple images.",
+                "operationId": "updateVehicleImages",
+                "parameters": [
+                    {
+                        "name": "vehicle",
+                        "in": "path",
+                        "description": "ID of the vehicle to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Vehicle image and detail data",
+                    "required": false,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "exterior_main_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_right_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_left_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_tank_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_handlebar_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_headlight_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_tail_light_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_speedometer_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_exhaust_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_seat_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_roof_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_bonetopen_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_main_engine_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_diagnoal_right_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_diagnoal_right_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_diagnoal_left_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_diagnoal_left_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_rear_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_right_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_right_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_left_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_left_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_wheel_spare_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_right_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_right_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_left_back_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_tyrethread_left_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_underbody_front_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_underbody_rear_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_underbody_right_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "exterior_underbody_left_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_dashboard_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_infotainment_system_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_steering_wheel_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_odometer_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_gear_lever_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_pedals_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_front_cabin_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_mid_cabin_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_rear_cabin_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_driver_side_door_panel_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_driver_side_adjustment_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_boot_inside_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "interior_boot_door_open_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "others_keys_img": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Vehicle updated successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Vehicle updated successfully."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized. Please login."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized. You do not have permission to update this vehicle."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update vehicle.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to update vehicle."
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unexpected error occurred."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [

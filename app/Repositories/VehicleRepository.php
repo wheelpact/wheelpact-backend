@@ -18,6 +18,11 @@ use App\Models\FuelTypes;
 use App\Models\Transmission;
 use App\Models\VehicleImages;
 
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
+
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 
@@ -67,61 +72,11 @@ class VehicleRepository {
 
     public function storeImagesNewVehicle($vehicleId, array $data) {
 
-        $fields = [
-            'exterior_main_front_img',
-            'exterior_main_right_img',
-            'exterior_main_back_img',
-            'exterior_main_left_img',
-            'exterior_main_tank_img',
-            'exterior_main_handlebar_img',
-            'exterior_main_headlight_img',
-            'exterior_main_tail_light_img',
-            'exterior_main_speedometer_img',
-            'exterior_main_exhaust_img',
-            'exterior_main_seat_img',
-            'exterior_main_roof_img',
-            'exterior_main_bonetopen_img',
-            'exterior_main_engine_img',
-            'exterior_diagnoal_right_front_img',
-            'exterior_diagnoal_right_back_img',
-            'exterior_diagnoal_left_back_img',
-            'exterior_diagnoal_left_front_img',
-            'exterior_wheel_front_img',
-            'exterior_wheel_rear_img',
-            'exterior_wheel_right_front_img',
-            'exterior_wheel_right_back_img',
-            'exterior_wheel_left_back_img',
-            'exterior_wheel_left_front_img',
-            'exterior_wheel_spare_img',
-            'exterior_tyrethread_front_img',
-            'exterior_tyrethread_back_img',
-            'exterior_tyrethread_right_front_img',
-            'exterior_tyrethread_right_back_img',
-            'exterior_tyrethread_left_back_img',
-            'exterior_tyrethread_left_front_img',
-            'exterior_underbody_front_img',
-            'exterior_underbody_rear_img',
-            'exterior_underbody_right_img',
-            'exterior_underbody_left_img',
-            'interior_dashboard_img',
-            'interior_infotainment_system_img',
-            'interior_steering_wheel_img',
-            'interior_odometer_img',
-            'interior_gear_lever_img',
-            'interior_pedals_img',
-            'interior_front_cabin_img',
-            'interior_mid_cabin_img',
-            'interior_rear_cabin_img',
-            'interior_driver_side_door_panel_img',
-            'interior_driver_side_adjustment_img',
-            'interior_boot_inside_img',
-            'interior_boot_door_open_img',
-            'others_keys_img',
-        ];
+        $imageFields = Vehicles::imageFields();
 
         $imageData = ['vehicle_id' => $vehicleId];
 
-        foreach ($fields as $field) {
+        foreach ($imageFields as $field) {
             if (isset($data[$field]) && $data[$field] instanceof \Illuminate\Http\UploadedFile) {
                 $image = $data[$field];
 
@@ -226,7 +181,8 @@ class VehicleRepository {
         return array_filter($data, fn($key) => in_array($key, $fields), ARRAY_FILTER_USE_KEY);
     }
 
-    public function update(Vehicles $vehicle, array $data): Vehicles {
+    // Update existing vehicle details
+    public function updateVehicledetails(Vehicles $vehicle, array $data): Vehicles {
         Log::info('VehicleRepository@update called', [
             'vehicle_id' => $vehicle->id,
             'original' => $vehicle->toArray(),
@@ -255,6 +211,45 @@ class VehicleRepository {
         }
 
         return $vehicle;
+    }
+
+    // Update images for a existing vehicle
+    public function updateVehicleImages(int $vehicleId, array $data): VehicleImages {
+        try {
+            // Ensure vehicle exists
+            $vehicle = Vehicles::findOrFail($vehicleId);
+
+            // Find or create associated vehicle_images record
+            $vehicleImages = VehicleImages::firstOrNew(['vehicle_id' => $vehicleId]);
+
+            // Get list of image fields
+            $imageFields = VehicleImages::imageFields();
+
+            // Define image folder based on vehicle's unique ID
+            $folder = $data['unique_id'] ?? 'VEH-' . now()->timestamp;
+
+            foreach ($imageFields as $field) {
+                if (isset($data[$field]) && $data[$field] instanceof UploadedFile) {
+                    try {
+                        $path = $data[$field]->store("vehicle_images/{$folder}", 'public');
+                        $vehicleImages->{$field} = $path;
+                    } catch (Exception $uploadException) {
+                        Log::error("Failed to upload {$field}: " . $uploadException->getMessage());
+                        throw new Exception("Image upload failed for field '{$field}'.");
+                    }
+                }
+            }
+
+            $vehicleImages->vehicle_id = $vehicle->id;
+            $vehicleImages->save();
+
+            return $vehicleImages;
+        } catch (ModelNotFoundException $e) {
+            throw new Exception('Vehicle not found.');
+        } catch (Exception $e) {
+            Log::error('Failed to update vehicle images: ' . $e->getMessage());
+            throw $e; // Re-throw to be handled by controller or service
+        }
     }
 
     public function delete(Vehicles $vehicle) {
