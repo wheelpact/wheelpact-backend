@@ -90,7 +90,7 @@ class Vehicles extends Model {
 
     // Relationships
 
-    public function branches() {
+    public function branch() {
         return $this->belongsTo(Branches::class, 'branch_id');
     }
 
@@ -139,7 +139,7 @@ class Vehicles extends Model {
     }
 
     public function images() {
-        return $this->hasOne(VehicleImages::class, 'vehicle_id');
+        return $this->hasMany(VehicleImages::class, 'vehicle_id');
     }
 
     public static function imageFields(): array {

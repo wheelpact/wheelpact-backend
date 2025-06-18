@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->boolean('is_active')->default(1);
             $table->string('img_body_type', 100);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

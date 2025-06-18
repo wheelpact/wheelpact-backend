@@ -77,6 +77,7 @@ return new class extends Migration {
             $table->text('others_keys_img')->nullable();
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
     /**

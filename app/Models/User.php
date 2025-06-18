@@ -107,7 +107,7 @@ class User extends Authenticatable {
         );
     }
     // User.php (Dealer)
-    public function branches() {
+    public function branch() {
         return $this->hasMany(Branches::class, 'dealer_id');
     }
 }

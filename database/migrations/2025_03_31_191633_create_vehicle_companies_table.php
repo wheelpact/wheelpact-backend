@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('cmp_cat')->nullable();
             $table->boolean('is_active')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

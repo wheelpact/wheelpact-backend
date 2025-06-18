@@ -13,6 +13,296 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/dealerApi/v1/branches": {
+            "get": {
+                "tags": [
+                    "Dealer: Branches"
+                ],
+                "summary": "List all branches of the authenticated dealer",
+                "description": "Returns a paginated list of branches created by the logged-in dealer.",
+                "operationId": "getDealerBranches",
+                "responses": {
+                    "200": {
+                        "description": "List of branches",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Branch Name"
+                                                    },
+                                                    "branch_type": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "contact_number": {
+                                                        "type": "string",
+                                                        "example": "9876543210"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "branch@example.com"
+                                                    },
+                                                    "thumbnail": {
+                                                        "type": "string",
+                                                        "example": "thumb.jpg"
+                                                    },
+                                                    "logo": {
+                                                        "type": "string",
+                                                        "example": "logo.jpg"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Dealer: Branches"
+                ],
+                "summary": "Create a new branch",
+                "description": "Creates a new branch with optional banners and multiple deliverable images.",
+                "operationId": "createBranch",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "branch_type",
+                                    "branch_supported_vehicle_type",
+                                    "branch_services",
+                                    "country_id",
+                                    "state_id",
+                                    "city_id",
+                                    "address",
+                                    "contact_number",
+                                    "whatsapp_no",
+                                    "email",
+                                    "short_description",
+                                    "map_latitude",
+                                    "map_longitude",
+                                    "map_city",
+                                    "map_district",
+                                    "map_state",
+                                    "branch_logo",
+                                    "branch_thumbnail"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Name of branch",
+                                        "type": "string"
+                                    },
+                                    "branch_type": {
+                                        "description": "Type of branch (1=Main Branch, 2=Sub Branch)",
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ],
+                                        "example": 1
+                                    },
+                                    "branch_supported_vehicle_type": {
+                                        "description": "Supported vehicle types (1=Car, 2=Bike, 3=Both)",
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2,
+                                            3
+                                        ],
+                                        "example": 3
+                                    },
+                                    "branch_services": {
+                                        "description": "Services offered by the branch",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "Oil Change",
+                                            "Tire Replacement",
+                                            "Brake Inspection"
+                                        ]
+                                    },
+                                    "country_id": {
+                                        "description": "ID of the country where the branch is located",
+                                        "type": "integer",
+                                        "example": "101"
+                                    },
+                                    "state_id": {
+                                        "description": "ID of the state where the branch is located",
+                                        "type": "integer",
+                                        "example": "201"
+                                    },
+                                    "city_id": {
+                                        "description": "ID of the city where the branch is located",
+                                        "type": "integer",
+                                        "example": "301"
+                                    },
+                                    "address": {
+                                        "description": "Full address of the branch",
+                                        "type": "string",
+                                        "example": "123 Main St, City, State, 12345"
+                                    },
+                                    "contact_number": {
+                                        "description": "Contact number of branch",
+                                        "type": "string",
+                                        "example": "9876543210"
+                                    },
+                                    "whatsapp_no": {
+                                        "description": "WhatsApp number of branch",
+                                        "type": "string",
+                                        "example": "9876543210"
+                                    },
+                                    "email": {
+                                        "description": "Email address of the branch",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "jhon@example.com"
+                                    },
+                                    "short_description": {
+                                        "type": "string"
+                                    },
+                                    "branch_map": {
+                                        "type": "string"
+                                    },
+                                    "map_latitude": {
+                                        "description": "Latitude for branch location on map",
+                                        "type": "string",
+                                        "example": "12.9715987"
+                                    },
+                                    "map_longitude": {
+                                        "description": "Longitude for branch location on map",
+                                        "type": "string",
+                                        "example": "77.594566"
+                                    },
+                                    "map_city": {
+                                        "description": "City for branch location on map",
+                                        "type": "string",
+                                        "example": "Mumbai"
+                                    },
+                                    "map_district": {
+                                        "description": "District for branch location on map",
+                                        "type": "string",
+                                        "example": "Mumbai District"
+                                    },
+                                    "map_state": {
+                                        "description": "State for branch location on map",
+                                        "type": "string",
+                                        "example": "Maharashtra"
+                                    },
+                                    "branch_logo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "branch_thumbnail": {
+                                        "description": "Branch thumbnail image",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "branch_banner1": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "branch_banner2": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "branch_banner3": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "deliverables_img_name[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Branch created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Branch created successfully."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/customerApi/v1/customerRegister": {
             "post": {
                 "tags": [
@@ -2390,6 +2680,57 @@
             }
         },
         "/api/dealerApi/v1/vehicles/{vehicle}": {
+            "get": {
+                "tags": [
+                    "Dealer: Vehicles"
+                ],
+                "summary": "Get Vehicle Details",
+                "description": "Fetches details of a specific vehicle by ID",
+                "operationId": "getVehicleDetails",
+                "parameters": [
+                    {
+                        "name": "vehicle",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Vehicle details fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Vehicle fetched successfully."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Vehicle not found or access denied"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Dealer: Vehicles"
@@ -3673,6 +4014,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Dealer: Branches",
+            "description": "Dealer: Branches"
+        },
         {
             "name": "Customers",
             "description": "Customers"

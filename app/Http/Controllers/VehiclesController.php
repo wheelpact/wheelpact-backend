@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -67,8 +67,6 @@ class VehiclesController extends Controller {
 
     public function index(Request $request) {
         try {
-            DB::enableQueryLog(); // Start SQL query logging
-
             $user = Auth::user();
 
             if (!$user) {
@@ -77,19 +75,10 @@ class VehiclesController extends Controller {
 
             $vehicles = $this->vehicleService->listVehicles($user);
 
-            // Optional: log SQL queries
-            Log::info('Executed Queries:', DB::getQueryLog());
-
             return VehicleResource::collection($vehicles);
         } catch (Exception $e) {
-            Log::error('Error fetching vehicles: ' . $e->getMessage(), [
-                'exception' => $e,
-                'user_id' => auth()->id()
-            ]);
-
             return response()->json([
-                'message' => 'An error occurred while fetching vehicles.',
-                'error' => $e->getMessage(), // Optional: remove this in production
+                'message' => 'An error occurred while fetching vehicles.'
             ], 500);
         }
     }
@@ -206,17 +195,29 @@ class VehiclesController extends Controller {
 
     public function store(StoreVehicleRequest $request) {
         try {
+
             $data = $request->validated();
 
             // Assign the authenticated user's ID as the creator
             $data['created_by'] = AUTH::id();
+
+            // Safe cast vehicle_type to int (since request values are strings by default)
+            $vehicleType = (int) $request->input('vehicle_type');
+
+            $prefix = match ($vehicleType) {
+                1 => 'WVEH-C-',
+                2 => 'WVEH-B-',
+                default => 'WVEH-U-', // U for unknown or unclassified
+            };
+
+            $data['unique_id'] = $prefix . now()->format('YmdHis') . '-' . Str::upper(Str::random(5));
 
             // Handle file upload
             if ($request->hasFile('thumbnail_url')) {
                 $file = $request->file('thumbnail_url');
 
                 if ($file->isValid()) {
-                    $data['thumbnail_url'] = $file->store('vehicle_thumbnails', 'public');
+                    $data['thumbnail_url'] = $file->store('vehicle_thumbnails/' . $data['unique_id'], 'public');
                 } else {
                     return response()->json([
                         'message' => 'Uploaded file is not valid.',
@@ -486,8 +487,8 @@ class VehiclesController extends Controller {
                 return response()->json(['message' => 'Unauthorized. Please login.'], 401);
             }
 
-            // Check if the vehicle belongs to one of the dealer's branches
-            $dealerBranchIds = $user->branches()->pluck('id')->toArray();
+            // Check if the vehicle belongs to one of the dealer's branch
+            $dealerBranchIds = $user->branch()->pluck('id')->toArray();
 
             if (!in_array($vehicle->branch_id, $dealerBranchIds)) {
                 return response()->json([
@@ -502,7 +503,7 @@ class VehiclesController extends Controller {
                 $file = $request->file('thumbnail_url');
 
                 if ($file->isValid()) {
-                    $data['thumbnail_url'] = $file->store('vehicle_thumbnails', 'public');
+                    $data['thumbnail_url'] = $file->store('vehicle_thumbnails/' . $vehicle->unique_id, 'public');
                 } else {
                     return response()->json([
                         'message' => 'Uploaded thumbnail file is not valid.',
@@ -680,6 +681,57 @@ class VehiclesController extends Controller {
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/dealerApi/v1/vehicles/{vehicle}",
+     *     summary="Get Vehicle Details",
+     *     description="Fetches details of a specific vehicle by ID",
+     *     operationId="getVehicleDetails",
+     *     tags={"Dealer: Vehicles"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="vehicle",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Vehicle details fetched successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Vehicle fetched successfully."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Vehicle not found or access denied"),
+     * )
+     */
+    public function show($id) {
+        $user = AUTH::user(); // minor fix: use lowercase auth() helper
+
+        try {
+            $vehicle = $this->vehicleService->getVehicleById($id, $user);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Vehicle fetched successfully.',
+                'data' => new VehicleResource($vehicle)
+            ]);
+        } catch (ModelNotFoundException $e) { // precise exception
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage() ?: 'Vehicle not found or access denied.',
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'An error occurred.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * @OA\Delete(
      *     path="/api/dealerApi/v1/vehicles/{vehicle}",
      *     summary="Delete Vehicle - Remove From Listing",
@@ -715,7 +767,7 @@ class VehiclesController extends Controller {
             $vehicle = Vehicles::findOrFail($id);
 
             // Check authorization
-            $dealerBranchIds = $user->branches()->pluck('id')->toArray();
+            $dealerBranchIds = $user->branch()->pluck('id')->toArray();
             if (!in_array($vehicle->branch_id, $dealerBranchIds)) {
                 return response()->json([
                     'message' => 'Unauthorized. You do not have permission to delete this vehicle. / It does not belong to your branch.'

@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Vehicles;
 use App\Repositories\VehicleRepository;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Models\VehicleImages;
 
@@ -13,7 +13,7 @@ use App\Models\VehicleImages;
 class VehicleService {
     protected $vehicleRepo;
 
-    
+
     public function __construct(VehicleRepository $vehicleRepo) {
         $this->vehicleRepo = $vehicleRepo;
     }
@@ -58,6 +58,21 @@ class VehicleService {
 
     public function updateVehicleImages(int $vehicleId, array $data): VehicleImages {
         return $this->vehicleRepo->updateVehicleImages($vehicleId, $data);
+    }
+
+    public function getVehicleById($id, $user) {
+        $vehicle = $this->vehicleRepo->findVehicleWithRelations($id);
+
+        if (!$vehicle) {
+            throw new ModelNotFoundException('Vehicle not found');
+        }
+   
+        $dealerId = $vehicle->branch->dealer_id ?? null;
+        if (!$user->is_admin && $dealerId !== $user->id) {
+            throw new ModelNotFoundException('Unauthorized access');
+        }
+
+        return $vehicle;
     }
 
     public function deleteVehicle(Vehicles $vehicle) {

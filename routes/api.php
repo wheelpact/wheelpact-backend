@@ -3,13 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiclesController;
 use App\Http\Controllers\FormDataController;
-use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use App\Http\Controllers\BranchController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -52,7 +51,8 @@ Route::prefix('customerApi/v1')->middleware(['allowed_ip'])->group(function () {
 });
 
 
-Route::prefix('dealerApi/v1')->middleware(['allowed_ip'])->group(function () {
+//Route::prefix('dealerApi/v1')->middleware(['allowed_ip'])->group(function () {
+Route::prefix('dealerApi/v1')->group(function () {
 
     // Public routes
     Route::post('dealerLogin', [UserController::class, 'login']);
@@ -63,7 +63,10 @@ Route::prefix('dealerApi/v1')->middleware(['allowed_ip'])->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('logout', [UserController::class, 'logout']);
+
         // Authenticated Dealer Vehicle Routes
+
+        //for vehicle management
         Route::prefix('vehicles')->group(function () {
             // List vehicles
             Route::get('/', [VehiclesController::class, 'index'])->name('dealer.vehicles.index');
@@ -80,9 +83,18 @@ Route::prefix('dealerApi/v1')->middleware(['allowed_ip'])->group(function () {
             // Update existing vehicle images
             Route::post('{vehicle}/update-images', [VehiclesController::class, 'updateVehicleImages'])->name('dealer.vehicles.images.update');
 
+            // Get vehicle details
+            Route::get('{vehicle}', [VehiclesController::class, 'show'])->name('dealer.vehicles.show');
+
             // Soft delete vehicle
             Route::delete('{vehicle}', [VehiclesController::class, 'destroy'])->name('dealer.vehicles.destroy');
         });
+
+        // for branch management
+        Route::get('/branches', [BranchController::class, 'index'])->name('branches.index');
+
+        // Create new branch
+        Route::post('/branches', [BranchController::class, 'store'])->name('branches.store');
     });
 
     // public data for vehicle forms & front website

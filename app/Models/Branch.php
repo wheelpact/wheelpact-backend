@@ -4,14 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\vehicles;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+class Branch extends Model {
+    use SoftDeletes, HasFactory;
 
-class Branches extends Model {
-    use HasFactory;
-
-    protected $table = 'branches'; // Ensure this matches your DB table name
+    protected $table = 'branches';
 
     protected $fillable = [
         'dealer_id',
@@ -40,34 +38,40 @@ class Branches extends Model {
         'map_state',
         'is_active',
         'is_admin_approved',
-        'admin_approved_dt',
-        'created_at',
-        'updated_at',
-        'deleted_at'
-    ]; // Add relevant fields
+        'admin_approval_dt',
+    ];
 
+    public $timestamps = true;
+
+    protected $casts = [
+        'admin_approval_dt' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    /** Relationships */
 
     public function dealer() {
-        return $this->belongsTo(User::class, 'dealer_id', 'id');
+        return $this->belongsTo(User::class, 'dealer_id');
     }
 
-    public function vehicles() {
-        return $this->hasMany(Vehicles::class, 'branch_id', 'id');
+    public function deliverables() {
+        return $this->hasMany(BranchDeliverableImage::class, 'branch_id');
     }
 
-    public function branches() {
-        return $this->belongsTo(Branches::class, 'branch_id', 'id');
+    public function ratings() {
+        return $this->hasMany(BranchRating::class, 'branch_id');
     }
 
     public function country() {
-        return $this->belongsTo(Country::class, 'country_id', 'id');
+        return $this->belongsTo(Country::class, 'country_id');
     }
 
     public function state() {
-        return $this->belongsTo(State::class, 'state_id', 'id');
+        return $this->belongsTo(State::class, 'state_id');
     }
 
     public function city() {
-        return $this->belongsTo(City::class, 'city_id', 'id');
+        return $this->belongsTo(City::class, 'city_id');
     }
 }

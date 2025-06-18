@@ -174,6 +174,7 @@ class VehicleResource extends JsonResource {
             ];
         }
 
+    
         // Fallback
         return parent::toArray($request);
 

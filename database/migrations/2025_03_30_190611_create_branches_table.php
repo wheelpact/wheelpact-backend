@@ -39,6 +39,7 @@ return new class extends Migration {
             $table->integer('is_admin_approved')->nullable()->comment('1=approved,2=pending,3=rejected');
             $table->timestamp('admin_approved_dt')->nullable()->comment('date and time when the branch is approved by admin');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -2,14 +2,11 @@
 
 namespace App\Repositories;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Carbon;
+
 
 use App\Models\Vehicles;
-use App\Models\VehicleType;
 use App\Models\VehicleCompanies as VehicleCompany;
 use App\Models\VehicleCompanyModel;
-use App\Models\VehicleCompaniesModelVariants;
 use App\Models\VehicleBodyTypes;
 use App\Models\Country;
 use App\Models\State;
@@ -18,7 +15,6 @@ use App\Models\FuelTypes;
 use App\Models\Transmission;
 use App\Models\VehicleImages;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
@@ -48,10 +44,10 @@ class VehicleRepository {
                     'variant:id,name',
                     'fuelType:id,name',
                     'bodyType:id,title',
-                    'branches:id,city_id,name,contact_number',
-                    'branches.country:id,name',
-                    'branches.state:id,name',
-                    'branches.city:id,name',
+                    'branch:id,city_id,name,contact_number',
+                    'branch.country:id,name',
+                    'branch.state:id,name',
+                    'branch.city:id,name',
                     'indiarto:id,rto_state_code,place',
                     'transmission:id,title'
                 ]
@@ -100,13 +96,13 @@ class VehicleRepository {
 
         $vehicleType = $data['vehicle_type'] ?? null;
 
-        $prefix = match ($vehicleType) {
-            1 => 'WVEH-C-',
-            2 => 'WVEH-B-',
-            default => 'WVEH-U-', // U for unknown or unclassified
-        };
+        // $prefix = match ($vehicleType) {
+        //     1 => 'WVEH-C-',
+        //     2 => 'WVEH-B-',
+        //     default => 'WVEH-U-', // U for unknown or unclassified
+        // };
 
-        $data['unique_id'] = $prefix . now()->format('YmdHis') . '-' . Str::upper(Str::random(5));
+        // $data['unique_id'] = $prefix . now()->format('YmdHis') . '-' . Str::upper(Str::random(5));
 
         $sharedFields = [
             'unique_id',
@@ -183,31 +179,12 @@ class VehicleRepository {
 
     // Update existing vehicle details
     public function updateVehicledetails(Vehicles $vehicle, array $data): Vehicles {
-        Log::info('VehicleRepository@update called', [
-            'vehicle_id' => $vehicle->id,
-            'original' => $vehicle->toArray(),
-            'incoming_data' => $data,
-        ]);
-
         // Fill the model with new data
         $vehicle->fill($data);
 
         // Check what has changed (dirty attributes)
-        $dirty = $vehicle->getDirty();
-
-        if (!empty($dirty)) {
-            Log::info('Dirty attributes to be updated:', $dirty);
-
+        if ($vehicle->isDirty()) {
             $vehicle->save();
-
-            Log::info('Vehicle updated successfully.', [
-                'vehicle_id' => $vehicle->id,
-                'updated_attributes' => $dirty,
-            ]);
-        } else {
-            Log::info('No changes detected. Vehicle not updated.', [
-                'vehicle_id' => $vehicle->id,
-            ]);
         }
 
         return $vehicle;
@@ -250,6 +227,13 @@ class VehicleRepository {
             Log::error('Failed to update vehicle images: ' . $e->getMessage());
             throw $e; // Re-throw to be handled by controller or service
         }
+    }
+
+
+    public function findVehicleWithRelations($id) {
+        return Vehicles::with(['images', 'branch'])
+            ->where('id', $id)
+            ->first();
     }
 
     public function delete(Vehicles $vehicle) {
