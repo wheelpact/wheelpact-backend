@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('branch_banner2')->nullable();
             $table->string('branch_banner3')->nullable();
             $table->string('branch_thumbnail')->nullable();
-            $table->string('branch_logo')->nullable();
+            $table->string('branch_logo')->nullable()->comment('logo of the branch');
             $table->integer('branch_type')->nullable()->comment('1=Main Branch, 2=Sub Branch');
             $table->integer('branch_supported_vehicle_type')->nullable()->comment('1=only cars, 2=only bikes, 3=both cars and bikes');
             $table->text('branch_services')->nullable()->comment('list of services provided by the branch in separated by comma');

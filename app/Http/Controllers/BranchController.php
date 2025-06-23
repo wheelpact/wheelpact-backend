@@ -9,6 +9,7 @@ use App\Http\Requests\Branch\BranchStoreRequest;
 use App\Http\Requests\Branch\BranchUpdateRequest;
 use App\Services\BranchService;
 use App\Resources\BranchResource;
+use App\Models\Branch;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -64,13 +65,13 @@ class BranchController extends Controller {
 
     public function index(Request $request): JsonResponse {
         try {
-            $user = Auth::user();
+            $dealer = Auth::user();
 
-            if (!$user) {
+            if (!$dealer) {
                 return response()->json(['message' => 'Unauthorized. Please login.'], 401);
             }
 
-            $branches = $this->service->list($user);
+            $branches = $this->service->list($dealer);
 
             return response()->json([
                 'success' => true,
@@ -166,11 +167,6 @@ class BranchController extends Controller {
         // Ensure execution stops here
         $validatedData = $request->validated();
 
-        // // Ensure 'branch_services' is an array
-        // if (isset($validatedData['branch_services']) && is_string($validatedData['branch_services'])) {
-        //     $validatedData['branch_services'] = explode(',', $validatedData['branch_services']);
-        // }
-
         try {
             $branch = $this->service->store($validatedData);
             return response()->json([
@@ -187,20 +183,286 @@ class BranchController extends Controller {
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/dealerApi/v1/branches/{id}",
+     *     summary="Update an existing branch",
+     *     description="Updates an existing branch with optional logo, banners, and deliverables using POST with _method=PUT (multipart form).",
+     *     operationId="updateBranch",
+     *     tags={"Dealer: Branches"},
+     *     security={{"bearerAuth":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the branch to update",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"_method"},
+     *                 @OA\Property(
+     *                     property="_method",
+     *                     type="string",
+     *                     example="PUT",
+     *                     description="Override method for Laravel PUT request"
+     *                 ),
+     *                 @OA\Property(property="name", type="string"),
+     *                 @OA\Property(property="branch_type", type="integer", enum={1,2}),
+     *                 @OA\Property(property="branch_supported_vehicle_type", type="integer", enum={1,2,3}),
+     *                 @OA\Property(
+     *                     property="branch_services",
+     *                     type="array",
+     *                     @OA\Items(type="string"),
+     *                     example={"Oil Change", "Battery Service"}
+     *                 ),
+     *                 @OA\Property(property="country_id", type="integer", example=101),
+     *                 @OA\Property(property="state_id", type="integer", example=201),
+     *                 @OA\Property(property="city_id", type="integer", example=301),
+     *                 @OA\Property(property="address", type="string", example="123 Main St, City, State, 12345"),
+     *                 @OA\Property(property="contact_number", type="string", example="9876543210"),
+     *                 @OA\Property(property="whatsapp_no", type="string", example="9876543210"),
+     *                 @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *                 @OA\Property(property="short_description", type="string"),
+     *                 @OA\Property(property="branch_map", type="string"),
+     *                 @OA\Property(property="map_latitude", type="string", example="12.9715987"),
+     *                 @OA\Property(property="map_longitude", type="string", example="77.594566"),
+     *                 @OA\Property(property="map_city", type="string", example="Mumbai"),
+     *                 @OA\Property(property="map_district", type="string", example="Mumbai District"),
+     *                 @OA\Property(property="map_state", type="string", example="Maharashtra"),
+     *                 @OA\Property(property="branch_logo", type="string", format="binary"),
+     *                 @OA\Property(property="branch_thumbnail", type="string", format="binary", description="Branch thumbnail image"),                
+     *                 @OA\Property(property="branch_banner1", type="string", format="binary"),
+     *                 @OA\Property(property="branch_banner2", type="string", format="binary"),
+     *                 @OA\Property(property="branch_banner3", type="string", format="binary"),
+     * 
+     *                 @OA\Property(
+     *                     property="deliverables_img_name[]",
+     *                     type="array",
+     *                     @OA\Items(type="string", format="binary")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Branch updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Branch updated successfully."),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error or update failure",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Branch update failed.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
+
     public function update(BranchUpdateRequest $request, int $id): JsonResponse {
-        $branch = $this->service->update($id, $request->validated());
-        return response()->json([
-            'success' => true,
-            'message' => 'Branch updated successfully.',
-            'data' => new $this->resource($branch),
-        ]);
+        try {
+            $dealer = AUTH::user();
+
+            $branch = Branch::where('id', $id)
+                ->where('dealer_id', $dealer->id)
+                ->first();
+
+            if (!$branch) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Branch not found or unauthorized.',
+                ], 404);
+            }
+
+            $updatedBranch = $this->service->update($branch->id, $request->validated());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Branch updated successfully.',
+                'data' => new BranchResource($updatedBranch),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Branch update failed.',
+                'error' => $e->getMessage(), // Remove in production
+            ], 400);
+        }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/dealerApi/v1/branches/{id}",
+     *     summary="Get branch details by ID",
+     *     description="Returns the branch details if it belongs to the authenticated dealer.",
+     *     operationId="getDealerBranchById",
+     *     tags={"Dealer: Branches"},
+     *     security={{"bearerAuth":{}}},
+     * 
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the branch",
+     *         @OA\Schema(type="integer", example=123)
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Branch details retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Branch details fetched successfully."),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 ref="#/components/schemas/BranchResource"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Branch not found or unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Branch not found or unauthorized.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
+
+    public function show(int $id): JsonResponse {
+        try {
+
+            $dealer = AUTH::user();
+
+            $branch = $this->service->getByIdAndDealer($id, $dealer->id);
+
+            if (!$branch) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Branch not found or unauthorized.',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Branch details fetched successfully.',
+                'data' => new BranchResource($branch),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch branch details.',
+                'error' => $e->getMessage(), // Remove in production
+            ], 400);
+        }
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/dealerApi/v1/branches/{id}",
+     *     summary="Soft delete a branch",
+     *     description="Soft deletes a branch if it belongs to the authenticated dealer.",
+     *     operationId="deleteBranch",
+     *     tags={"Dealer: Branches"},
+     *     security={{"bearerAuth":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the branch to delete",
+     *         @OA\Schema(type="integer",example=123)
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Branch deleted successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Branch deleted successfully.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Branch not found or unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Branch not found or unauthorized.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
     public function destroy(int $id): JsonResponse {
-        $this->service->delete($id);
-        return response()->json([
-            'success' => true,
-            'message' => 'Branch deleted successfully.',
-        ]);
+
+        try {
+            $dealer = Auth::user();
+
+            $branch = $this->service->getByIdAndDealer($id, $dealer->id);
+
+            if (!$branch) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Branch not found or unauthorized.',
+                ], 404);
+            }
+
+            // Ensure the user is authenticated
+            $deleted = $this->service->delete($id, $dealer->id);
+
+            if (!$deleted) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Branch not found or unauthorized.',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Branch deleted successfully.',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Branch deletion failed.',
+                'error' => $e->getMessage(),
+            ], 400);
+        }
     }
 }

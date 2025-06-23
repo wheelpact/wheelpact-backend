@@ -303,6 +303,405 @@
                 ]
             }
         },
+        "/api/dealerApi/v1/branches/{id}": {
+            "get": {
+                "tags": [
+                    "Dealer: Branches"
+                ],
+                "summary": "Get branch details by ID",
+                "description": "Returns the branch details if it belongs to the authenticated dealer.",
+                "operationId": "getDealerBranchById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the branch",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 123
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Branch details retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Branch details fetched successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/BranchResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Branch not found or unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Branch not found or unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Dealer: Branches"
+                ],
+                "summary": "Update an existing branch",
+                "description": "Updates an existing branch with optional logo, banners, and deliverables using POST with _method=PUT (multipart form).",
+                "operationId": "updateBranch",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the branch to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "_method"
+                                ],
+                                "properties": {
+                                    "_method": {
+                                        "description": "Override method for Laravel PUT request",
+                                        "type": "string",
+                                        "example": "PUT"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "branch_type": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2
+                                        ]
+                                    },
+                                    "branch_supported_vehicle_type": {
+                                        "type": "integer",
+                                        "enum": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "branch_services": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "Oil Change",
+                                            "Battery Service"
+                                        ]
+                                    },
+                                    "country_id": {
+                                        "type": "integer",
+                                        "example": 101
+                                    },
+                                    "state_id": {
+                                        "type": "integer",
+                                        "example": 201
+                                    },
+                                    "city_id": {
+                                        "type": "integer",
+                                        "example": 301
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "123 Main St, City, State, 12345"
+                                    },
+                                    "contact_number": {
+                                        "type": "string",
+                                        "example": "9876543210"
+                                    },
+                                    "whatsapp_no": {
+                                        "type": "string",
+                                        "example": "9876543210"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "short_description": {
+                                        "type": "string"
+                                    },
+                                    "branch_map": {
+                                        "type": "string"
+                                    },
+                                    "map_latitude": {
+                                        "type": "string",
+                                        "example": "12.9715987"
+                                    },
+                                    "map_longitude": {
+                                        "type": "string",
+                                        "example": "77.594566"
+                                    },
+                                    "map_city": {
+                                        "type": "string",
+                                        "example": "Mumbai"
+                                    },
+                                    "map_district": {
+                                        "type": "string",
+                                        "example": "Mumbai District"
+                                    },
+                                    "map_state": {
+                                        "type": "string",
+                                        "example": "Maharashtra"
+                                    },
+                                    "branch_logo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "branch_thumbnail": {
+                                        "description": "Branch thumbnail image",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "branch_banner1": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "branch_banner2": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "branch_banner3": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "deliverables_img_name[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Branch updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Branch updated successfully."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error or update failure",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Branch update failed."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Dealer: Branches"
+                ],
+                "summary": "Soft delete a branch",
+                "description": "Soft deletes a branch if it belongs to the authenticated dealer.",
+                "operationId": "deleteBranch",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the branch to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 123
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Branch deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Branch deleted successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Branch not found or unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Branch not found or unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/customerApi/v1/customerRegister": {
             "post": {
                 "tags": [
@@ -3909,6 +4308,72 @@
                             1,
                             2
                         ]
+                    }
+                },
+                "type": "object"
+            },
+            "BranchResource": {
+                "title": "Branch Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Super Auto Service"
+                    },
+                    "dealer_id": {
+                        "type": "integer",
+                        "example": 101
+                    },
+                    "branch_type": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "branch_services": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "country_id": {
+                        "type": "integer"
+                    },
+                    "state_id": {
+                        "type": "integer"
+                    },
+                    "city_id": {
+                        "type": "integer"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "contact_number": {
+                        "type": "string"
+                    },
+                    "whatsapp_no": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "short_description": {
+                        "type": "string"
+                    },
+                    "map_latitude": {
+                        "type": "string"
+                    },
+                    "map_longitude": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
                     }
                 },
                 "type": "object"

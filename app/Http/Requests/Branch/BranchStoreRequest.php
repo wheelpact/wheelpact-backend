@@ -31,6 +31,7 @@ class BranchStoreRequest extends FormRequest {
             'map_city' => 'required|string',
             'map_district' => 'required|string',
             'map_state' => 'required|string',
+            'branch_thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'branch_logo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'branch_banner1' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'branch_banner2' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',

@@ -47,6 +47,7 @@ class Branch extends Model {
         'admin_approval_dt' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'deleted_at' => 'datetime'
     ];
 
     /** Relationships */

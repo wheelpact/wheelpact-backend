@@ -6,6 +6,30 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use App\Resources\BranchDeliverableImage;
 use App\Resources\BranchRating;
 
+/**
+ * @OA\Schema(
+ *     schema="BranchResource",
+ *     type="object",
+ *     title="Branch Resource",
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="name", type="string", example="Super Auto Service"),
+ *     @OA\Property(property="dealer_id", type="integer", example=101),
+ *     @OA\Property(property="branch_type", type="integer", example=1),
+ *     @OA\Property(property="branch_services", type="array", @OA\Items(type="string")),
+ *     @OA\Property(property="country_id", type="integer"),
+ *     @OA\Property(property="state_id", type="integer"),
+ *     @OA\Property(property="city_id", type="integer"),
+ *     @OA\Property(property="address", type="string"),
+ *     @OA\Property(property="contact_number", type="string"),
+ *     @OA\Property(property="whatsapp_no", type="string"),
+ *     @OA\Property(property="email", type="string"),
+ *     @OA\Property(property="short_description", type="string"),
+ *     @OA\Property(property="map_latitude", type="string"),
+ *     @OA\Property(property="map_longitude", type="string"),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time")
+ * )
+ */
 
 class BranchResource extends JsonResource {
     public function toArray($request) {

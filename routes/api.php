@@ -90,13 +90,28 @@ Route::prefix('dealerApi/v1')->group(function () {
             Route::delete('{vehicle}', [VehiclesController::class, 'destroy'])->name('dealer.vehicles.destroy');
         });
 
-        // for branch management
-        Route::get('/branches', [BranchController::class, 'index'])->name('branches.index');
+        //for branch management
+        Route::prefix('branches')->group(function () {
+            // List branches
+            Route::get('/', [BranchController::class, 'index'])->name('branches.index');
 
-        // Create new branch
-        Route::post('/branches', [BranchController::class, 'store'])->name('branches.store');
+            // Create new branch
+            Route::post('/', [BranchController::class, 'store'])->name('branches.store');
+
+            // Update existing branch
+            Route::put('/{branchId}', [BranchController::class, 'update'])->name('branches.update');
+
+            // Get branch details
+            Route::get('/{branchId}', [BranchController::class, 'show'])->name('branches.show');
+
+            // Soft delete branch
+            Route::delete('/{branchId}', [BranchController::class, 'destroy'])->name('branches.destroy');
+        });
     });
 
+
+    // Soft delete branch
+    Route::delete('/branches/{branch}', [BranchController::class, 'destroy'])->name('branches.destroy');
     // public data for vehicle forms & front website
     Route::prefix('form-data')->group(function () {
 

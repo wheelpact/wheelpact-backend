@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Branch;
-use Illuminate\Support\Facades\Auth;
 
 class BranchRepository {
 
@@ -18,8 +17,7 @@ class BranchRepository {
     }
 
     public function create(array $data) {
-        // Assuming you're using Laravel's Auth system to get the logged-in user
-        $data['dealer_id'] = AUTH::id();
+
         return Branch::create($data);
     }
 
@@ -30,7 +28,21 @@ class BranchRepository {
         return $branch;
     }
 
-    public function delete($id) {
-        return Branch::destroy($id);
+    public function findByIdAndDealer(int $id, int $dealerId): ?Branch {
+        return Branch::where('id', $id)
+            ->where('dealer_id', $dealerId)
+            ->first();
+    }
+
+    public function delete($branchId, $dealerId): bool {
+        $branch = Branch::where('id', $branchId)
+            ->where('dealer_id', $dealerId)
+            ->first();
+
+        if (!$branch) {
+            return false;
+        }
+
+        return $branch->delete();
     }
 }
